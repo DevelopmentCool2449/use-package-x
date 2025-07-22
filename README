@@ -35,11 +35,11 @@ The hook depth is provided using the sub-keyword ~:depth~
 #+begin_src emacs-lisp
 (use-package test
   :hook+
-  ( :depth 10
+  (:depth 10
     (text-mode . auto-fill-mode)
     (prog-mode . (lambda () (test 1)))
     (a1 b1 c1))
-  ( :depth 5
+  (:depth 5
     (text-mode . auto-fill-mode)))
 #+end_src
 
@@ -58,11 +58,11 @@ And combine both forms together:
 #+begin_src emacs-lisp
 (use-package test
   :hook
-  ( :depth 10
+  (:depth 10
     (text-mode . auto-fill-mode)
     (prog-mode . (lambda () (test 1)))
     (a1 b1 c1))
-  ( :depth 5
+  (:depth 5
     (text-mode-2 . auto-fill-mode))
   (a2 b2 c2)
   (prog-mode . auto-fill-mode)
@@ -121,7 +121,6 @@ Any of these forms can be added together in the
          ("C-c" . "zzz")))
 #+end_src
 
-
 ** :custom-face*
 Like :custom-face but override the face specs.
 
@@ -136,6 +135,24 @@ for Emacs 31 users.
 (use-package test
   :custom-face*
   (test-face ((t :inherit error))))
+#+end_src
+
+** :defvar-keymap
+Define a new keymap or override an existent one.
+
+The value must be a single list with ~:map~ and a ~keymap~
+following the ~key~ and ~definition~, similar to ~defvar-keymap~.
+
+#+begin_src emacs-lisp
+(use-package test
+  :defvar-keymap
+  (:map mode-map
+        "C-x foo" #'bar
+        "C-x foo2" #'bar2
+        ;; you can define multiple in the same list
+        :map another-mode-map
+        "C-c foo" #'bar
+        "C-c foo2" #'bar2))
 #+end_src
 
 * Installation and Use

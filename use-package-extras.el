@@ -72,12 +72,10 @@
 ;;    making impossible to override face specs,
 ;;    this keyword is intended for Emacs 31 users.
 ;;
-;; TODO: Keywords to add:
-;;         * :rebind-map
-;;            Like `:bind (:map keymap ...)' but empty the `keymap'
-;;            before binding the keys, useful if
-;;            you want to use only your own keybindings
-;;            in the keymap and not its default ones.
+;; * :defvar-keymap
+;;    Define a keymap and bind it,
+;;    useful if you want to override an existent
+;;    keymap with your own keybindings.
 
 ;;;; Code:
 
@@ -89,10 +87,10 @@
 (defvar use-package-extras-keywords
   '(:setopt
     :hook+
-    :rebind-map
     :which-key-replacement
     :custom-face*
-    :add-to-list)
+    ;; :add-to-list
+    :defvar-keymap)
   "Supported `use-package-extras' keywords.")
 
 ;;; Internal functions
@@ -164,12 +162,12 @@
       ;; to use-package-extras--normalize-pairs
       (mapcan
        (lambda (elt)
-         (if (eq (car elt) :depth)
+         (if (eq (car-safe elt) :depth)
              (mapcar (lambda (pairs)
                        (cons (nth 1 elt) (list pairs)))
                      (use-package-extras--normalize-pairs (cddr elt) label name))
            (use-package-extras--normalize-pairs (list elt) label name)))
-       arg))))
+       args))))
 
 (defun use-package-extras--normalize-commands (list)
   "Like `use-package-normalize-commands' but for supporting the :depth keyword."
@@ -198,10 +196,11 @@
    (cl-mapcan
     (lambda (def)
       (let* ((car (car def))
-             (syms (if (integerp car)
+             (depth (if (integerp car) car))
+             (syms (if depth
                        (caadr def)
                      car))
-             (fun (if (integerp car)
+             (fun (if depth
                       (cdadr def)
                     (cdr def))))
         (when fun
@@ -212,12 +211,12 @@
                         ;; Yes..
                         ;; This also supports the `use-package-hook-name-suffix'... ¬¬
                         (not (string-suffix-p "-mode" symname)))
-                   `(add-hook (quote ,sym) (function ,fun) (if (integerp car) ,car))
+                   `(add-hook (quote ,sym) (function ,fun) ,depth)
                  `(add-hook
                    (quote ,(intern
                             (concat symname use-package-hook-name-suffix)))
                    (function ,fun)
-                   ,(if (integerp car) car)))))
+                   ,depth))))
            (use-package-hook-handler-normalize-mode-symbols syms)))))
     (use-package-extras--normalize-commands args))))
 
@@ -245,7 +244,7 @@
          (t
           ;; Error!
           (use-package-error
-           (concat keyword
+           (concat (symbol-name keyword)
                    " values must be a (<string> . <string>)"
                    " or (:keymap <symbol> (<string> <string>"
                    " <a `which-key-add-keymap-based-replacements' valid replacement>) ...)"
@@ -282,6 +281,28 @@
                   (put ',(car def) 'face-modified t)))
            args)
    (use-package-process-keywords name rest state)))
+
+
+;;;; :defvar-keymap
+(defun use-package-normalize/:defvar-keymap (_name keyword args)
+  (use-package-as-one (symbol-name keyword) args
+    (lambda (label arg)
+      (unless (eq (car arg) :map)
+        (use-package-error
+         (concat label
+                 " value must be (:map <keymap> <string> #'<function> ...)"
+                 " ensure `:map <keymap>' is in the list.")))
+      (cdr (use-package-split-list-at-keys :map arg)))))
+
+(defun use-package-handler/:defvar-keymap (name _keyword args rest state)
+  (use-package-concat
+   `(,@(mapcar
+        (lambda (elt)
+          `(defvar-keymap ,(car elt)
+             ,@(cdr elt)))
+        args))
+   (use-package-process-keywords name rest state)))
+
 
 
 

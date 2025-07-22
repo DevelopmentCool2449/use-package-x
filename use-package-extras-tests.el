@@ -32,20 +32,26 @@
     ( :depth 10
       (text-mode . auto-fill-mode)
       (prog-mode . (lambda () (test 1)))
-      (a1 b1 c1))
+      (a1 b1 c1)
+      major-mode)
     ( :depth 5
       (text-mode . auto-fill-mode))
+    major-mode
     (a2 b2 c2)
     (text-mode . auto-fill-mode)
     (text-mode . (lambda () (test 2)))))
 
-;;; :rebind-map (`WIP')
+;;; :defvar-keymap
 (pp-macroexpand-expression
  `(use-package test
-    :rebind-map
-    (:map test-mode-map
-          ("<remap> <right-char>" . widget-forward)
-          ("<remap> <left-char>"  . widget-backward))))
+    :defvar-keymap
+    ( :map test-mode-map
+      "C-x foo" #'command
+      "C-x foo" (function)
+      "C-x foo"  #'command
+      :map another-test-mode-map
+      "C-c bar" #'command
+      "C-c bar"  #'command)))
 
 ;;; :which-key-replacement
 (pp-macroexpand-expression
