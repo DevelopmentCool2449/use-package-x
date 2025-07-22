@@ -217,22 +217,6 @@
     (use-package-extras--normalize-commands args))))
 
 
-;;;; :rebind-map
-
-(defalias 'use-package-normalize/:rebind-map 'use-package-normalize-binder)
-
-(defun use-package-handler/:rebind-map
-    (name _keyword args rest state &optional bind-macro)
-  (use-package-concat
-   (use-package-process-keywords name rest state)
-   `((setq ,name (make-sparse-keymap))
-     ,@(mapcar
-        #'(lambda (xs)
-            `(,(if bind-macro bind-macro 'bind-keys)
-              :package ,name ,@(use-package-normalize-commands xs)))
-        (use-package-split-list-at-keys :break args)))))
-
-
 ;;;; :which-key-replacement
 (defun use-package-normalize/:which-key-replacement (name _keyword args)
   (let ((arg args)
