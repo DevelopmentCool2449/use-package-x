@@ -1,0 +1,117 @@
+# -*- mode: org -*-
+* use-package-extras
+
+use-package-extras is an extension for use-package which provides
+extra keywords for a better and cleaner configuration.
+
+#+begin_quote
+[!WARNING]
+This package still in development, some keywords may not work
+as expected
+#+end_quote
+
+* List of available keywords
+
+** :setopt
+
+Similar to :custom, but can also bind plain variables, the form is a
+cons-cell where the ~car~ is the variable to bind and the ~cdr~ the value.
+
+This uses the ~setopt~ function, for bind the variables.
+
+#+begin_src emacs-lisp
+(use-package test
+  :setopt
+  (test-variable . 1)
+  (another-test-variable . 2))
+#+end_src
+
+** :hook+
+An enchanted ~:hook~ which supports hooks depths.
+The hook depth is provided using the sub-keyword ~:depth~
+
+#+begin_src emacs-lisp
+(use-package test
+  :hook+
+  ( :depth 10
+    (text-mode . auto-fill-mode)
+    (prog-mode . (lambda () (test 1)))
+    (a1 b1 c1))
+  ( :depth 5
+    (text-mode . auto-fill-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package test
+  :hook+
+  (a2 b2 c2)
+  (text-mode . auto-fill-mode)
+  (text-mode . (lambda () (test 2))))
+#+end_src
+
+** :which-key-replacement
+Allows to set any which-key replacement.
+The form can be a any of these options:
+
+
+A cons-cell for ~which-key-add-key-based-replacements~
+
+#+begin_src emacs-lisp
+(use-package test
+  :which-key-replacement
+  ("C-x" . "foo")
+  ("C-c" . "bar")
+  ...)
+#+end_src
+
+A list which specifies a keymap, for
+~which-key-add-keymap-based-replacements~
+
+#+begin_src emacs-lisp
+(use-package test
+  :which-key-replacement
+  (:keymap map
+           ("C-x" "foo" command-name)
+           ("C-c" "bar" command-name)))
+#+end_src
+
+Or a list which specifies a major mode, for
+~which-key-add-major-mode-key-based-replacements~
+
+#+begin_src emacs-lisp
+(use-package test
+  :which-key-replacement
+  (:mode major-mode
+         ("C-x" . "foo")))
+#+end_src
+
+Any of these forms can be added together in the
+~:which-key-replacement~ keyword:
+
+#+begin_src emacs-lisp
+(use-package test
+  :which-key-replacement
+  ("C-x" . "foo")
+  ("C-c" . "bar")
+  (:keymap map
+           ("C-x" "foo" command-name)
+           ("C-c" "bar" command-name))
+  (:mode major-mode
+         ("C-c" . "zzz")))
+#+end_src
+
+
+** :custom-face*
+Like :custom-face but override the face specs.
+
+#+begin_quote
+[!NOTE]
+In emacs 31 the :custom-face behavior was changed making
+impossible to override the face specs.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package test
+  :custom-face*
+  (test-face ((t :inherit error))))
+#+end_src
