@@ -1,8 +1,10 @@
 # -*- mode: org -*-
 * use-package-extras
 
+#+html: <img src="https://raw.githubusercontent.com/DevelopmentCool2449/emacs-svg-badges/main/elisp_logo_warning.svg" align="right" width="10%">
+
 use-package-extras is an extension for use-package which provides
-extra keywords for a better and cleaner configuration.
+extra keywords for a simple and cleaner configuration.
 
 #+begin_quote
 [!WARNING]
@@ -41,6 +43,8 @@ The hook depth is provided using the sub-keyword ~:depth~
     (text-mode . auto-fill-mode)))
 #+end_src
 
+Also can work as another ~:hook~:
+
 #+begin_src emacs-lisp
 (use-package test
   :hook+
@@ -49,10 +53,25 @@ The hook depth is provided using the sub-keyword ~:depth~
   (text-mode . (lambda () (test 2))))
 #+end_src
 
-** :which-key-replacement
-Allows to set any which-key replacement.
-The form can be a any of these options:
+And combine both forms together:
 
+#+begin_src emacs-lisp
+(use-package test
+  :hook
+  ( :depth 10
+    (text-mode . auto-fill-mode)
+    (prog-mode . (lambda () (test 1)))
+    (a1 b1 c1))
+  ( :depth 5
+    (text-mode-2 . auto-fill-mode))
+  (a2 b2 c2)
+  (prog-mode . auto-fill-mode)
+  (prog-mode . (lambda () (test 2))))
+#+end_src
+
+** :which-key-replacement
+A simple way to set your which-key replacement keybindings
+The form can be a any of these options:
 
 A cons-cell for ~which-key-add-key-based-replacements~
 
@@ -72,7 +91,8 @@ A list which specifies a keymap, for
   :which-key-replacement
   (:keymap map
            ("C-x" "foo" command-name)
-           ("C-c" "bar" command-name)))
+           ("C-c" "bar" command-name)
+           ...))
 #+end_src
 
 Or a list which specifies a major mode, for
@@ -82,7 +102,8 @@ Or a list which specifies a major mode, for
 (use-package test
   :which-key-replacement
   (:mode major-mode
-         ("C-x" . "foo")))
+         ("C-x" . "foo")
+         ...))
 #+end_src
 
 Any of these forms can be added together in the
@@ -107,7 +128,8 @@ Like :custom-face but override the face specs.
 #+begin_quote
 [!NOTE]
 In emacs 31 the :custom-face behavior was changed making
-impossible to override the face specs.
+impossible to override the face specs, this keyword is intended
+for Emacs 31 users.
 #+end_quote
 
 #+begin_src emacs-lisp
@@ -115,3 +137,20 @@ impossible to override the face specs.
   :custom-face*
   (test-face ((t :inherit error))))
 #+end_src
+
+* Installation and Use
+
+Currently ~use-package-extras~ is not available in any Package Archive,
+but you can install it via ~package-vc-install~:
+
+~M-x package-vc-install RET https://github.com/DevelopmentCool2449/use-package-extras RET~
+
+Alternatively using ~use-package~ ~:vc~ keyword:
+
+#+begin_src emacs-lisp
+(use-package use-package-extras
+  :ensure t
+  :vc ( :url "https://github.com/DevelopmentCool2449/use-package-extras"
+        :rev :newest))
+#+end_src
+
