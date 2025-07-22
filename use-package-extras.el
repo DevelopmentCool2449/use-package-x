@@ -69,11 +69,12 @@
 ;; * :custom-face*
 ;;    Like :custom-face but override the face specs.
 ;;    In emacs 31 the :custom-face behavior was changed
-;;    making impossible to override face specs.
+;;    making impossible to override face specs,
+;;    this keyword is intended for Emacs 31 users.
 ;;
 ;; TODO: Keywords to add:
 ;;         * :rebind-map
-;;            Like :bind but empty the `keymap'
+;;            Like `:bind (:map keymap ...)' but empty the `keymap'
 ;;            before binding the keys, useful if
 ;;            you want to use only your own keybindings
 ;;            in the keymap and not its default ones.
@@ -108,15 +109,16 @@
 ;;;; :setopt
 
 (defun use-package-normalize/:setopt (_name keyword args)
-  (use-package-as-one (symbol-name keyword) args
-    (lambda (label arg)
-      (unless (consp arg)
-        (use-package-error
-         (format "%s a (<symbol> . <value>)"
-                 label)))
-      (if (use-package-non-nil-symbolp (car arg))
-          (list arg)
-        arg))))
+  (mapcar
+   (lambda (elt)
+     (use-package-as-one (symbol-name keyword) (list elt)
+       (lambda (label arg)
+         (unless (and (consp arg) (use-package-non-nil-symbolp (car arg)))
+           (use-package-error
+            (format "%s must be a (<symbol> . <value>) or list of these"
+                    label)))
+         arg)))
+   args))
 
 (defun use-package-handler/:setopt (name _keyword args rest state)
   (use-package-concat
@@ -152,6 +154,7 @@
       (unless (or (use-package-non-nil-symbolp arg) (consp arg))
         (use-package-error
          (concat label
+                 " must be"
                  " a <symbol> or a list or these"
                  " or (<symbol or list of symbols> . <symbol or list of functions>)"
                  " or (:depth <depth number> <any of previous forms>)")))
@@ -159,13 +162,14 @@
       ;; and return (n-depth (the-hook-form))
       ;; otherwise return a list accoding
       ;; to use-package-extras--normalize-pairs
-      (cl-loop for elt in arg
-               if (eq (car elt) :depth)
-               append
-               (cl-loop for pairs in (use-package-extras--normalize-pairs (cddr elt) label name)
-                        collect (cons (nth 1 elt) (list pairs)))
-               else
-               append (use-package-extras--normalize-pairs (list elt) label name)))))
+      (mapcan
+       (lambda (elt)
+         (if (eq (car elt) :depth)
+             (mapcar (lambda (pairs)
+                       (cons (nth 1 elt) (list pairs)))
+                     (use-package-extras--normalize-pairs (cddr elt) label name))
+           (use-package-extras--normalize-pairs (list elt) label name)))
+       arg))))
 
 (defun use-package-extras--normalize-commands (list)
   "Like `use-package-normalize-commands' but for supporting the :depth keyword."
@@ -181,11 +185,12 @@
   "Like `use-package-autoloads-mode' but for support the depth numbers."
   (use-package-autoloads-mode
    nil nil
-   (cl-loop for list in args
-            if (integerp (car list))
-            collect (cadr list)
-            else
-            collect list)))
+   (mapcar
+    (lambda (list)
+      (if (integerp (car list))
+          (cadr list)
+        list))
+    args)))
 
 (defun use-package-handler/:hook+ (name _keyword args rest state)
   (use-package-concat
@@ -204,8 +209,8 @@
            (lambda (sym)
              (let ((symname (symbol-name sym)))
                (if (and (boundp sym)
-                        ;; Mode variables are usually bound, but
-                        ;; their hooks are named FOO-mode-hook.
+                        ;; Yes..
+                        ;; This also supports the `use-package-hook-name-suffix'... ¬¬
                         (not (string-suffix-p "-mode" symname)))
                    `(add-hook (quote ,sym) (function ,fun) (if (integerp car) ,car))
                  `(add-hook
@@ -218,7 +223,7 @@
 
 
 ;;;; :which-key-replacement
-(defun use-package-normalize/:which-key-replacement (name _keyword args)
+(defun use-package-normalize/:which-key-replacement (_name keyword args)
   (let ((arg args)
         args*)
     (while arg
@@ -240,9 +245,11 @@
          (t
           ;; Error!
           (use-package-error
-           (concat (symbol-name name)
-                   " ,"
-                   ))))))
+           (concat keyword
+                   " values must be a (<string> . <string>)"
+                   " or (:keymap <symbol> (<string> <string>"
+                   " <a `which-key-add-keymap-based-replacements' valid replacement>) ...)"
+                   " or (:mode <symbol> (<string> . <string>))"))))))
     args*))
 
 (defun use-package-handler/:which-key-replacement (name _keyword args rest state)
@@ -260,8 +267,7 @@
                     ((eq :mode car)
                      `(which-key-add-major-mode-key-based-replacements ,(nth 1 elt)
                         ,@(cl-loop for (key . replacement) in (cddr elt)
-                                   append `(,key ,replacement)))
-                     ))))
+                                   append `(,key ,replacement)))))))
         args))))
 
 
