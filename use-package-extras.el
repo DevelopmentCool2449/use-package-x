@@ -33,11 +33,7 @@
 ;; * :which-key-replacement
 ;; * :custom-face*
 ;; * :defvar-keymap
-;; * :emacs<
-;; * :emacs<=
-;; * :emacs=
-;; * :emacs>
-;; * :emacs>=
+;; * :emacs< :emacs<= :emacs= :emacs> :emacs>=
 ;;
 
 ;;;; Code:

@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
-;; Author: Elijah Gabe Pérez <eg642616@gmail.com>
+;; Author: Elias G. Perez <eg642616@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
