@@ -42,11 +42,6 @@
 ;;; Requires
 (require 'use-package-extras-core)
 
-;;; Declared functions
-(declare-function which-key-add-key-based-replacements "which-key")
-(declare-function which-key-add-keymap-based-replacements "which-key")
-(declare-function which-key-add-major-mode-key-based-replacements "which-key")
-
 
 
 ;;; Add keyword to `use-package-extras-keywords'
