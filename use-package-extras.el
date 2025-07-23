@@ -50,8 +50,5 @@
 (require 'use-package-extras-defvar-keymap)
 (require 'use-package-extras-custom-face*)
 
-;;; Add the new keywords to `use-package-keywords'
-(use-package-extras-add-keywords)
-
 (provide 'use-package-extras)
 ;;; use-package-extras.el ends here
