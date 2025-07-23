@@ -2,12 +2,12 @@
 * use-package-extras
 
 use-package-extras is an extension for use-package which provides
-extra keywords for a simple and cleaner configuration.
+additional keywords for a simple and cleaner configuration.
 
 #+begin_quote
 [!WARNING]
-This package still in development, some keywords may not work
-as expected
+This package is still under development, some keywords may not work as
+expected
 #+end_quote
 
 This package provides the following extra keywords for ~use-package~:
@@ -55,7 +55,7 @@ And combine both forms together:
 
 #+begin_src emacs-lisp
 (use-package test
-  :hook
+  :hook+
   (:depth 10
     (text-mode . auto-fill-mode)
     (prog-mode . (lambda () (test 1)))
@@ -71,11 +71,6 @@ And combine both forms together:
 ** :which-key-replacement
 A simple way to set your which-key replacement keybindings
 The form can be a any of these options:
-
-#+begin_quote
-[!NOTE]
-This requires which-key installed.
-#+end_quote
 
 A cons-cell for ~which-key-add-key-based-replacements~
 
@@ -164,8 +159,8 @@ following the ~key~ and ~definition~, similar to ~defvar-keymap~.
 Shorthands for ~:if (<version-*> emacs-version <version>)~, the version
 can be number or a string.
 
-# quoted number and quoted strings are not be accepted
-# who the hell would do that? :^)
+# quoted number and quoted string are not accepted
+# who would do that? :^)
 
 + ~:emacs<~
 #+begin_src emacs-lisp

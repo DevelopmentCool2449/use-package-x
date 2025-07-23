@@ -7,7 +7,7 @@
 ;; Created: 2025-07-13
 ;; Package-Requires: ((emacs "24.3") use-package)
 ;; Keywords: convenience, extensions
-;; Version: 0.1
+;; Version: 0.0.1
 
 ;; This file is not yet part of GNU Emacs.
 
