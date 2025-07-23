@@ -62,7 +62,7 @@
 ;;      ("C-c" . "bar")
 ;;      (:keymap map
 ;;               ("C-x" "foo" command-name)
-;;               ("C-c" "bar" command-name))
+;;               ("c" "mode-prefix" (prefix-map)))
 ;;      (:mode major-mode
 ;;             ("C-c" . "zzz")))
 ;;
@@ -83,13 +83,18 @@
 (require 'use-package)
 (require 'cl-lib)
 
+;;; Declared functions
+(declare-function which-key-add-key-based-replacements "which-key" ())
+(declare-function which-key-add-keymap-based-replacements "which-key" ())
+(declare-function which-key-add-major-mode-key-based-replacements "which-key" ())
+
 ;;; Variables
 (defvar use-package-extras-keywords
   '(:setopt
     :hook+
     :which-key-replacement
     :custom-face*
-    ;; :add-to-list
+    ;; :add-to-list TODO: Is it worth it?
     :defvar-keymap)
   "Supported `use-package-extras' keywords.")
 
@@ -208,8 +213,8 @@
            (lambda (sym)
              (let ((symname (symbol-name sym)))
                (if (and (boundp sym)
-                        ;; Yes..
-                        ;; This also supports the `use-package-hook-name-suffix'... ¬¬
+                        ;; Yes, this also supports the
+                        ;; `use-package-hook-name-suffix'... ¬¬
                         (not (string-suffix-p "-mode" symname)))
                    `(add-hook (quote ,sym) (function ,fun) ,depth)
                  `(add-hook
@@ -262,7 +267,11 @@
                     ((eq :keymap car)
                      `(which-key-add-keymap-based-replacements ,(nth 1 elt)
                         ,@(cl-loop for (key string command) in (cddr elt)
-                                   append `(,key (quote ,(cons string command))))))
+                                   append `(,key
+                                            (quote (,string
+                                                    . ,(if (consp command)
+                                                           (symbol-value (car command))
+                                                         command)))))))
                     ((eq :mode car)
                      `(which-key-add-major-mode-key-based-replacements ,(nth 1 elt)
                         ,@(cl-loop for (key . replacement) in (cddr elt)

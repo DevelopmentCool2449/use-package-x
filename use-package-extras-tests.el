@@ -20,14 +20,14 @@
 
 ;;; :setopt
 (pp-macroexpand-expression
- `(use-package test
+ '(use-package test
     :setopt
     (test-variable . 1)
     (another-test-variable . 2)))
 
 ;;; :hook+
 (pp-macroexpand-expression
- `(use-package test
+ '(use-package test
     :hook+
     ( :depth 10
       (text-mode . auto-fill-mode)
@@ -43,7 +43,7 @@
 
 ;;; :defvar-keymap
 (pp-macroexpand-expression
- `(use-package test
+ '(use-package test
     :defvar-keymap
     ( :map test-mode-map
       "C-x foo" #'command
@@ -55,18 +55,19 @@
 
 ;;; :which-key-replacement
 (pp-macroexpand-expression
- `(use-package test
+ '(use-package test
     :which-key-replacement
     ("C-x" . "foo")
     ("C-c" . "bar")
     (:keymap map
              ("C-x" "foo" command-name)
+             ("c" "prefix-map" (help-map))
              ("C-x" "foo" command-name))
     (:mode major-mode
            ("C-x" . "foo"))))
 
 ;;; :custom-face*
 (pp-macroexpand-expression
- `(use-package test
+ '(use-package test
     :custom-face*
     (test-face ((t :inherit error)))))

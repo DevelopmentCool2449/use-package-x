@@ -73,6 +73,11 @@ And combine both forms together:
 A simple way to set your which-key replacement keybindings
 The form can be a any of these options:
 
+#+begin_quote
+[!NOTE]
+This requires which-key installed.
+#+end_quote
+
 A cons-cell for ~which-key-add-key-based-replacements~
 
 #+begin_src emacs-lisp
@@ -116,7 +121,8 @@ Any of these forms can be added together in the
   ("C-c" . "bar")
   (:keymap map
            ("C-x" "foo" command-name)
-           ("C-c" "bar" command-name))
+           ("C-c" "bar" command-name)
+           ("p" "mode-prefix" (prefix-map)))
   (:mode major-mode
          ("C-c" . "zzz")))
 #+end_src
