@@ -66,6 +66,33 @@
     (:mode major-mode
            ("C-x" . "foo"))))
 
+
+;;; :emacs<
+(pp-macroexpand-expression
+ '(use-package test
+    :emacs< 32
+    :emacs< 31))
+
+;;; :emacs<=
+(pp-macroexpand-expression
+ '(use-package test
+    :emacs<= 32))
+
+;;; :emacs=
+(pp-macroexpand-expression
+ '(use-package test
+    :emacs= "31.0.50"))
+
+;;; :emacs>
+(pp-macroexpand-expression
+ '(use-package test
+    :emacs> 29.1))
+
+;;; :emacs>=
+(pp-macroexpand-expression
+ '(use-package test
+    :emacs>= "31"))
+
 ;;; :custom-face*
 (pp-macroexpand-expression
  '(use-package test
