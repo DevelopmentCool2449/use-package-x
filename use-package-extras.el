@@ -3,12 +3,13 @@
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
+;; Homepage: https://github.com/DevelopmentCool2449/use-package-extras
 ;; Created: 2025-07-13
-;; Package-Requires: ((emacs "28.1") (use-package "2.4.6"))
+;; Package-Requires: ((emacs "24.3") use-package)
 ;; Keywords: convenience, extensions
 ;; Version: 0.1
 
-;; This file is not part of GNU Emacs.
+;; This file is not yet part of GNU Emacs.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This packages provides the following extra keywords for
+;; This package provides the following extra keywords for
 ;; `use-package':
 ;;
 ;; * :setopt
