@@ -12,7 +12,7 @@ This package still in development, some keywords may not work
 as expected
 #+end_quote
 
-* List of available keywords
+This package provides the following extra keywords for ~use-package~:
 
 ** :setopt
 
@@ -64,6 +64,7 @@ And combine both forms together:
     (a1 b1 c1))
   (:depth 5
     (text-mode-2 . auto-fill-mode))
+  (:depth -8 my-mode-hook)
   (a2 b2 c2)
   (prog-mode . auto-fill-mode)
   (prog-mode . (lambda () (test 2))))
@@ -161,7 +162,52 @@ following the ~key~ and ~definition~, similar to ~defvar-keymap~.
         "C-c foo2" #'bar2))
 #+end_src
 
-* Installation and Use
+** :emacs< :emacs<= :emacs= :emacs> :emacs>=
+Shorthands for ~:if (<version-*> emacs-version <version>)~, the version
+can be number or a string.
+
+# quoted number and quoted strings are not be accepted
+# who the hell would do that? :^)
+
++ ~:emacs<~
+#+begin_src emacs-lisp
+(use-package test
+  :emacs< 31)
+#+end_src
+
++ ~:emacs<=~
+#+begin_src emacs-lisp
+(use-package test
+  :emacs<= 32)
+#+end_src
+
++ ~:emacs=~
+#+begin_src emacs-lisp
+(use-package test
+  :emacs= "31.0.50")
+#+end_src
+
++ ~:emacs>~
+#+begin_src emacs-lisp
+(use-package test
+  :emacs> 29.1)
+#+end_src
+
++ ~:emacs>=~
+#+begin_src emacs-lisp
+(use-package test
+  :emacs>= "31")
+#+end_src
+
+This also have compatibility with other ~use-package~ keywords
+
+#+begin_src emacs-lisp
+(use-package test
+  :if t
+  :emacs< 31)
+#+end_src
+
+* Installation and Usage
 
 Currently ~use-package-extras~ is not available in any Package Archive,
 but you can install it via ~package-vc-install~:
@@ -176,4 +222,3 @@ Alternatively using ~use-package~ ~:vc~ keyword:
   :vc ( :url "https://github.com/DevelopmentCool2449/use-package-extras"
         :rev :newest))
 #+end_src
-
