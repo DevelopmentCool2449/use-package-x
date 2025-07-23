@@ -39,9 +39,6 @@
 
 ;;;; Code:
 
-;;; Necessary libraries
-(require 'use-package-extras-core)
-
 ;;; Import Keywords
 (require 'use-package-extras-emacs-versions)
 (require 'use-package-extras-setopt)
