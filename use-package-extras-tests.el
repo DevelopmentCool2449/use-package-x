@@ -70,7 +70,6 @@
 ;;; :emacs<
 (pp-macroexpand-expression
  '(use-package test
-    :emacs< 32
     :emacs< 31))
 
 ;;; :emacs<=
@@ -92,6 +91,12 @@
 (pp-macroexpand-expression
  '(use-package test
     :emacs>= "31"))
+
+;; Compatibility with others keywords
+(pp-macroexpand-expression
+ '(use-package test
+    :if t
+    :emacs< 31))
 
 ;;; :custom-face*
 (pp-macroexpand-expression

@@ -43,8 +43,6 @@
 ;;; Requires
 (require 'use-package-extras-core)
 
-
-
 ;;; Add keyword to `use-package-extras-keywords'
 (use-package-extras--add-to-list
  '(:emacs<
@@ -62,39 +60,33 @@
 If version is a number, convert it to a string."
   (use-package-only-one (symbol-name keyword) args
     (lambda (_label version)
-      (if (numberp version)
-          (number-to-string version)
-        version))))
+      (let ((version (if (numberp version) (number-to-string version) version)))
+        (pcase keyword
+          (:emacs<  `(version< emacs-version ,version))
+          (:emacs<= `(version<= emacs-version ,version))
+          (:emacs=  `(version= emacs-version ,version))
+          (:emacs>  `(version< ,version emacs-version))
+          (:emacs>= `(version<= ,version emacs-version)))))))
 
 ;;; :emacs<
 (defalias 'use-package-normalize/:emacs< 'use-package-extras-normalize-version)
-(defun use-package-handler/:emacs< (name _keyword pred rest state)
-  (let ((body (use-package-process-keywords name rest state)))
-    `((when (version< emacs-version ,pred) ,@body))))
+(defalias 'use-package-handler/:emacs< 'use-package-handler/:if)
 
 ;;; :emacs<=
 (defalias 'use-package-normalize/:emacs<= 'use-package-extras-normalize-version)
-(defun use-package-handler/:emacs<= (name _keyword pred rest state)
-  (let ((body (use-package-process-keywords name rest state)))
-    `((when (version<= emacs-version ,pred) ,@body))))
+(defalias 'use-package-handler/:emacs<= 'use-package-handler/:if)
 
 ;;; :emacs=
 (defalias 'use-package-normalize/:emacs= 'use-package-extras-normalize-version)
-(defun use-package-handler/:emacs= (name _keyword pred rest state)
-  (let ((body (use-package-process-keywords name rest state)))
-    `((when (version= emacs-version ,pred) ,@body))))
+(defalias 'use-package-handler/:emacs= 'use-package-handler/:if)
 
 ;;; :emacs>
 (defalias 'use-package-normalize/:emacs> 'use-package-extras-normalize-version)
-(defun use-package-handler/:emacs> (name _keyword pred rest state)
-  (let ((body (use-package-process-keywords name rest state)))
-    `((when (version< ,pred emacs-version) ,@body))))
+(defalias 'use-package-handler/:emacs> 'use-package-handler/:if)
 
 ;;; :emacs>=
 (defalias 'use-package-normalize/:emacs>= 'use-package-extras-normalize-version)
-(defun use-package-handler/:emacs>= (name _keyword pred rest state)
-  (let ((body (use-package-process-keywords name rest state)))
-    `((when (version<= ,pred emacs-version) ,@body))))
+(defalias 'use-package-handler/:emacs>= 'use-package-handler/:if)
 
 (provide 'use-package-extras-emacs-versions)
 ;;; use-package-extras-emacs-versions.el ends here
