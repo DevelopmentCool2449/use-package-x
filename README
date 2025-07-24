@@ -22,8 +22,9 @@ This uses the ~setopt~ function, for bind the variables.
 #+begin_src emacs-lisp
 (use-package test
   :setopt
-  (test-variable . 1)
-  (another-test-variable . 2))
+  (a-number-var   . 2)
+  (a-list-var     . '(a b c d))
+  (a-function-var . (lambda () ...)))
 #+end_src
 
 ** :hook+

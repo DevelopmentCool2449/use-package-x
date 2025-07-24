@@ -21,8 +21,9 @@
 (pp-macroexpand-expression
  '(use-package test
     :setopt
-    (test-variable . 1)
-    (another-test-variable . 2)))
+    (a-function-var . (lambda () asdasda))
+    (a-number-var   . 1)
+    (a-list-var     . '(a b c d))))
 
 ;;; :hook+
 (pp-macroexpand-expression
