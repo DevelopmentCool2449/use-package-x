@@ -159,9 +159,6 @@ following the ~key~ and ~definition~, similar to ~defvar-keymap~.
 Shorthands for ~:if (<version-*> emacs-version <version>)~, the version
 can be number or a string.
 
-# quoted number and quoted string are not accepted
-# who would do that? :^)
-
 + ~:emacs<~
 #+begin_src emacs-lisp
 (use-package test
@@ -199,6 +196,32 @@ This also have compatibility with other ~use-package~ keywords
   :if t
   :emacs< 31)
 #+end_src
+
+** :doc
+Document your use-package declaration instead using comments (does nothing)
+
+The documentation can be anything:
+#+begin_src emacs-lisp
+(use-package flymake
+  :doc
+  "Flymake is an Emacs minor mode for on-the-fly syntax checking.
+Flymake collects diagnostic information from multiple sources,
+called backends, and visually annotates the buffer with the
+results."
+  :config ...)
+#+end_src
+
+Even symbols:
+#+begin_src emacs-lisp
+(use-package flymake
+  :doc
+  Flymake is an Emacs minor mode for on-the-fly syntax checking.
+  Flymake collects diagnostic information from multiple sources,
+  called backends, and visually annotates the buffer with the
+  results.
+  :config ...)
+#+end_src
+
 
 * Installation and Usage
 

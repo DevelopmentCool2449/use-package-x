@@ -102,3 +102,14 @@
  '(use-package test
     :custom-face*
     (test-face ((t :inherit error)))))
+
+;;; :doc
+(pp-macroexpand-expression
+ '(use-package test
+    :doc "This package does something"
+    :config (some-function)))
+
+(pp-macroexpand-expression
+ '(use-package test
+    :doc This package does something
+    :config (some-function)))

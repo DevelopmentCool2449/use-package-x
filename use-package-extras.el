@@ -46,6 +46,7 @@
 (require 'use-package-extras-which-key-replacement)
 (require 'use-package-extras-defvar-keymap)
 (require 'use-package-extras-custom-face*)
+(require 'use-package-extras-docs)
 
 (provide 'use-package-extras)
 ;;; use-package-extras.el ends here
