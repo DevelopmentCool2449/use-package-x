@@ -114,3 +114,12 @@
  '(use-package test
     :doc This package does something
     :config (some-function)))
+
+;;; :advice
+(pp-macroexpand-expression
+ '(use-package test
+    :advice (:add my-function :override other-function)))
+
+(pp-macroexpand-expression
+ '(use-package test
+    :advice (:remove my-function other-function)))

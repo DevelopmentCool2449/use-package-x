@@ -223,6 +223,25 @@ Even symbols:
   :config ...)
 #+end_src
 
+** :advice
+Shorthand for ~:init (advice-add ...)~:
+
+#+begin_src emacs-lisp
+(use-package test
+  :advice
+  (:add my-function :override other-function)
+  ;; This also supports lambdas
+  (:add my-other-function :around
+        (lambda (...) ...)))
+#+end_src
+
+And ~:init (advice-remove ...)~
+
+#+begin_src emacs-lisp
+(use-package test
+  :advice (:remove my-function other-function))
+#+end_src
+
 
 * Installation and Usage
 
