@@ -50,16 +50,18 @@
        (lambda (label arg)
          (unless (and (consp arg) (use-package-non-nil-symbolp (car arg)))
            (use-package-error
-            (format "%s must be a (<symbol> . <value>) or list of these"
-                    label)))
+            (concat label
+                    " must be a (<symbol> [<optional value>])"
+                    " or a list of these")))
          arg)))
    args))
 
 (defun use-package-handler/:setopt (name _keyword args rest state)
   (use-package-concat
    `((,'setopt
-      ,@(cl-loop for (variable . value) in args
-                 append `(,variable ,value))))
+      ,@(mapcan
+         (lambda (list) (list (car list) (nth 1 list)))
+         args)))
    (use-package-process-keywords name rest state)))
 
 (provide 'use-package-x-setopt)

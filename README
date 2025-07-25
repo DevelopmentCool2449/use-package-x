@@ -14,17 +14,19 @@ This package provides the following extra keywords for ~use-package~:
 
 ** :setopt
 
-Similar to :custom, but can also bind plain variables, the form is a
-cons-cell where the ~car~ is the variable to bind and the ~cdr~ the value.
+Similar to :custom, but can also bind plain variables.
 
 This uses the ~setopt~ function, for bind the variables.
 
 #+begin_src emacs-lisp
 (use-package test
   :setopt
-  (a-number-var   . 2)
-  (a-list-var     . '(a b c d))
-  (a-function-var . (lambda () ...)))
+  (number-var 2)
+  (list-var '(a b c d))
+  (function-var (lambda () ...))
+  ;; If you omit the value, it will be set to nil
+  (auto-revert-verbose)
+  (dired-omit-verbose))
 #+end_src
 
 ** :hook+

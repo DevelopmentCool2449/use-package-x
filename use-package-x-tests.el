@@ -21,9 +21,11 @@
 (pp-macroexpand-expression
  '(use-package test
     :setopt
-    (a-function-var . (lambda () asdasda))
-    (a-number-var   . 1)
-    (a-list-var     . '(a b c d))))
+    (function-var (lambda () asdasda))
+    (number-var 1)
+    (list-var '(a b c d))
+    ;; Set variable to nil
+    (variable)))
 
 ;;; :hook+
 ;; Hook depth
