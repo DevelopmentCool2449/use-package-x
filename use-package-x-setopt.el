@@ -1,4 +1,4 @@
-;;; use-package-extras-setopt.el --- :setopt keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-setopt.el --- :setopt keyword definition  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -35,12 +35,12 @@
 (require 'cl-lib)
 (require 'use-package)
 
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
 
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list :setopt)
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list :setopt)
 
 ;;; Functions
 (defun use-package-normalize/:setopt (_name keyword args)
@@ -62,5 +62,5 @@
                  append `(,variable ,value))))
    (use-package-process-keywords name rest state)))
 
-(provide 'use-package-extras-setopt)
-;;; use-package-extras-setopt.el ends here
+(provide 'use-package-x-setopt)
+;;; use-package-x-setopt.el ends here

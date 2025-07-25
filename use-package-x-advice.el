@@ -1,4 +1,4 @@
-;;; use-package-extras-advice.el --- :advice keyword definitions -*- lexical-binding: t; -*-
+;;; use-package-x-advice.el --- :advice keyword definitions -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -33,11 +33,11 @@
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list :advice)
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list :advice)
 
 
 
@@ -71,5 +71,5 @@
    (use-package-process-keywords name rest state)))
 
 
-(provide 'use-package-extras-advice)
-;;; use-package-extras-advice.el ends here
+(provide 'use-package-x-advice)
+;;; use-package-x-advice.el ends here

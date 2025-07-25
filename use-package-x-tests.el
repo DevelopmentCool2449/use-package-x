@@ -1,4 +1,4 @@
-;;; use-package-extras-tests.el --- test suite for use-package-extras keywords  -*- lexical-binding: t; -*-
+;;; use-package-x-tests.el --- test suite for use-package-x keywords  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 

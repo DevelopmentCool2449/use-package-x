@@ -1,7 +1,7 @@
 # -*- mode: org -*-
-* use-package-extras
+* use-package-x
 
-use-package-extras is an extension for use-package which provides
+use-package-x is an extension for use-package which provides
 additional keywords for a simple and cleaner configuration.
 
 #+begin_quote
@@ -269,28 +269,28 @@ And ~:init (advice-remove ...)~
 
 * Installation and Usage
 
-~use-package-extras~ is available in GNU ELPA, you can install it using
-~package-install~:
+~use-package-x~ is not available in any ELPA, but you can install
+it using ~package-vc-install~:
 
-~M-x package-install RET use-package-extras RET~
+~M-x package-vc-install RET https://github.com/DevelopmentCool2449/use-package-x RET~
 
 Alternatively using ~use-package~ ~:vc~ keyword:
 
 #+begin_src emacs-lisp
-(use-package use-package-extras
+(use-package use-package-x
   :ensure t
   ;; Alternatively using package-vc
-  :vc ( :url "https://github.com/DevelopmentCool2449/use-package-extras"
+  :vc ( :url "https://github.com/DevelopmentCool2449/use-package-x"
         :rev :newest))
 #+end_src
 
 After it is already installed and loaded you can add all the keywords
-to ~use-package-keywords~ calling ~use-package-extras-add-keywords~
+to ~use-package-keywords~ calling ~use-package-x-add-keywords~
 function:
 
 #+begin_src emacs-lisp
-(use-package use-package-extras
-  :config (use-package-extras-add-keywords))
+(use-package use-package-x
+  :config (use-package-x-add-keywords))
 #+end_src
 
 #+html: <img src="https://raw.githubusercontent.com/DevelopmentCool2449/emacs-svg-badges/main/powered_by_org_mode.svg" align="right" width="10%" alt="Powered by Org Mode">

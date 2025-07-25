@@ -1,4 +1,4 @@
-;;; use-package-extras-custom-face*.el --- :custom-face* keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-custom-face*.el --- :custom-face* keyword definition  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -32,12 +32,12 @@
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
 
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list :custom-face*)
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list :custom-face*)
 
 ;;; Functions
 (defalias 'use-package-normalize/:custom-face* 'use-package-normalize/:custom-face)
@@ -52,5 +52,5 @@
    (use-package-process-keywords name rest state)))
 
 
-(provide 'use-package-extras-custom-face*)
-;;; use-package-extras-custom-face*.el ends here
+(provide 'use-package-x-custom-face*)
+;;; use-package-x-custom-face*.el ends here

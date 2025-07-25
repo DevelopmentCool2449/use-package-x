@@ -1,9 +1,9 @@
-;;; use-package-extras.el --- Extra keywords for use-package  -*- lexical-binding: t; -*-
+;;; use-package-x.el --- Additional keywords for use-package  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
-;; Homepage: https://github.com/DevelopmentCool2449/use-package-extras
+;; Homepage: https://github.com/DevelopmentCool2449/use-package-x
 ;; Created: 2025-07-13
 ;; Package-Requires: ((emacs "24.3") use-package)
 ;; Keywords: convenience, extensions
@@ -42,14 +42,14 @@
 ;;;; Code:
 
 ;;; Import Keywords
-(require 'use-package-extras-emacs-versions)
-(require 'use-package-extras-setopt)
-(require 'use-package-extras-hook+)
-(require 'use-package-extras-which-key-replacement)
-(require 'use-package-extras-defvar-keymap)
-(require 'use-package-extras-custom-face*)
-(require 'use-package-extras-docs)
-(require 'use-package-extras-advice)
+(require 'use-package-x-emacs-versions)
+(require 'use-package-x-setopt)
+(require 'use-package-x-hook+)
+(require 'use-package-x-which-key-replacement)
+(require 'use-package-x-defvar-keymap)
+(require 'use-package-x-custom-face*)
+(require 'use-package-x-docs)
+(require 'use-package-x-advice)
 
-(provide 'use-package-extras)
-;;; use-package-extras.el ends here
+(provide 'use-package-x)
+;;; use-package-x.el ends here

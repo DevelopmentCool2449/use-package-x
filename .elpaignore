@@ -1,4 +1,4 @@
 COPYING
 .elpaignore
 README
-use-package-extras-tests.el
+use-package-x-tests.el

@@ -1,4 +1,4 @@
-;;; use-package-extras-emacs-versions.el --- :emacs< :emacs<= :emacs= :emacs> :emacs>= definitions  -*- lexical-binding: t; -*-
+;;; use-package-x-emacs-versions.el --- :emacs< :emacs<= :emacs= :emacs> :emacs>= definitions  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -41,21 +41,21 @@
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list
  '(:emacs<
    :emacs<=
    :emacs=
    :emacs>
    :emacs>=)
- use-package-extras-conditional-keywords)
+ use-package-x-conditional-keywords)
 
 
 
 ;;; Functions
-(defun use-package-extras-normalize-version (_name keyword args)
+(defun use-package-x-normalize-version (_name keyword args)
   "Normalize version in ARGS.
 If version is a number, convert it to a string."
   (use-package-only-one (symbol-name keyword) args
@@ -69,24 +69,24 @@ If version is a number, convert it to a string."
           (:emacs>= `(version<= ,version emacs-version)))))))
 
 ;;; :emacs<
-(defalias 'use-package-normalize/:emacs< 'use-package-extras-normalize-version)
+(defalias 'use-package-normalize/:emacs< 'use-package-x-normalize-version)
 (defalias 'use-package-handler/:emacs< 'use-package-handler/:if)
 
 ;;; :emacs<=
-(defalias 'use-package-normalize/:emacs<= 'use-package-extras-normalize-version)
+(defalias 'use-package-normalize/:emacs<= 'use-package-x-normalize-version)
 (defalias 'use-package-handler/:emacs<= 'use-package-handler/:if)
 
 ;;; :emacs=
-(defalias 'use-package-normalize/:emacs= 'use-package-extras-normalize-version)
+(defalias 'use-package-normalize/:emacs= 'use-package-x-normalize-version)
 (defalias 'use-package-handler/:emacs= 'use-package-handler/:if)
 
 ;;; :emacs>
-(defalias 'use-package-normalize/:emacs> 'use-package-extras-normalize-version)
+(defalias 'use-package-normalize/:emacs> 'use-package-x-normalize-version)
 (defalias 'use-package-handler/:emacs> 'use-package-handler/:if)
 
 ;;; :emacs>=
-(defalias 'use-package-normalize/:emacs>= 'use-package-extras-normalize-version)
+(defalias 'use-package-normalize/:emacs>= 'use-package-x-normalize-version)
 (defalias 'use-package-handler/:emacs>= 'use-package-handler/:if)
 
-(provide 'use-package-extras-emacs-versions)
-;;; use-package-extras-emacs-versions.el ends here
+(provide 'use-package-x-emacs-versions)
+;;; use-package-x-emacs-versions.el ends here

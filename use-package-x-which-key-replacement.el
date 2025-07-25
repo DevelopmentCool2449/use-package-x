@@ -1,4 +1,4 @@
-;;; use-package-extras-which-key-replacement.el --- :which-key-replacement keyword definitions  -*- lexical-binding: t; -*-
+;;; use-package-x-which-key-replacement.el --- :which-key-replacement keyword definitions  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -40,12 +40,12 @@
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
 
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list :which-key-replacement)
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list :which-key-replacement)
 
 ;;; Functions
 (defun use-package-normalize/:which-key-replacement (_name keyword args)
@@ -100,5 +100,5 @@
                                    append `(,key ,replacement)))))))
         args))))
 
-(provide 'use-package-extras-which-key-replacement)
-;;; use-package-extras-which-key-replacement.el ends here
+(provide 'use-package-x-which-key-replacement)
+;;; use-package-x-which-key-replacement.el ends here

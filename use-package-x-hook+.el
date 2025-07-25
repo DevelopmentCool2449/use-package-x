@@ -1,4 +1,4 @@
-;;; use-package-extras-hook+.el --- :hook+ keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-hook+.el --- :hook+ keyword definition  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -56,15 +56,15 @@
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
 
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list :hook+)
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list :hook+)
 
 ;;; Functions
-(defun use-package-extras--normalize-pairs (list label name)
+(defun use-package-x--normalize-pairs (list label name)
   "Normalize all the pairs in the LIST.
 This handle the :multi keyword"
   (if (ignore-errors (eq (cadar list) :multi))
@@ -108,11 +108,11 @@ This handle the :multi keyword"
          (if (eq (car-safe elt) :depth)
              (mapcar (lambda (pairs)
                        (cons (nth 1 elt) (list pairs)))
-                     (use-package-extras--normalize-pairs (cddr elt) label name))
-           (use-package-extras--normalize-pairs (list elt) label name)))
+                     (use-package-x--normalize-pairs (cddr elt) label name))
+           (use-package-x--normalize-pairs (list elt) label name)))
        args))))
 
-(defun use-package-extras--normalize-commands (list)
+(defun use-package-x--normalize-commands (list)
   "Like `use-package-normalize-commands' but for supporting the :depth keyword."
   (mapcar (lambda (x)
             (cond ((numberp (car x))
@@ -140,7 +140,7 @@ This handle the :multi keyword"
                     collect (cons cm 'command))
              else collect (cons (cdr x) 'command)))
 
-(defun use-package-extras--create-hook (sym fun depth)
+(defun use-package-x--create-hook (sym fun depth)
   "Return the proper `add-hook' for mode SYM with FUN and DEPTH if there is."
   (let ((symname (symbol-name sym)))
     (if (and (boundp sym)
@@ -173,10 +173,10 @@ functions."
            for mode in (use-package-hook-handler-normalize-mode-symbols syms)
            if multi-p append
              (cl-loop for fn in (cdr fun) collect
-                      (use-package-extras--create-hook mode fn depth))
+                      (use-package-x--create-hook mode fn depth))
            else
-             collect (use-package-extras--create-hook mode fun depth)))))
-    (use-package-extras--normalize-commands args))))
+             collect (use-package-x--create-hook mode fun depth)))))
+    (use-package-x--normalize-commands args))))
 
-(provide 'use-package-extras-hook+)
-;;; use-package-extras-hook+.el ends here
+(provide 'use-package-x-hook+)
+;;; use-package-x-hook+.el ends here

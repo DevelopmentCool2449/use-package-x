@@ -1,4 +1,4 @@
-;;; use-package-extras-defvar-keymap.el --- :defvar-keymap keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-defvar-keymap.el --- :defvar-keymap keyword definition  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -31,12 +31,12 @@
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
 
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list :defvar-keymap)
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list :defvar-keymap)
 
 ;;; Functions
 (defun use-package-normalize/:defvar-keymap (_name keyword args)
@@ -58,5 +58,5 @@
         args))
    (use-package-process-keywords name rest state)))
 
-(provide 'use-package-extras-defvar-keymap)
-;;; use-package-extras-defvar-keymap.el ends here
+(provide 'use-package-x-defvar-keymap)
+;;; use-package-x-defvar-keymap.el ends here

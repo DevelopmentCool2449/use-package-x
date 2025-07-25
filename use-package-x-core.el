@@ -1,4 +1,4 @@
-;;; use-package-extras-core.el --- Core utils for keywords definitions  -*- lexical-binding: t; -*-
+;;; use-package-x-core.el --- Core utils for keywords definitions  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -26,42 +26,42 @@
 
 
 ;;; Variables
-(defvar use-package-extras-keywords nil
-  "Supported `use-package-extras' keywords.")
+(defvar use-package-x-keywords nil
+  "Supported `use-package-x' keywords.")
 
-(defvar use-package-extras-conditional-keywords nil
-  "`use-package-extras' conditional keywords.")
+(defvar use-package-x-conditional-keywords nil
+  "`use-package-x' conditional keywords.")
 
 ;;; Functions
-(defmacro use-package-extras--add-to-list (keywords &optional list)
-  "Add KEYWORDS to `use-package-extras-keywords'.
+(defmacro use-package-x--add-to-list (keywords &optional list)
+  "Add KEYWORDS to `use-package-x-keywords'.
 
 KEYWORDS can be a list or a symbol keyword.
 
-By default, it will add KEYWORDS to `use-package-extras-keywords',
+By default, it will add KEYWORDS to `use-package-x-keywords',
 If LIST is non-nil, add them to LIST instead."
 
-  (let ((up-list (or list 'use-package-extras-keywords)))
+  (let ((up-list (or list 'use-package-x-keywords)))
     (if (consp keywords)
         `(mapc (lambda (kw) (cl-pushnew kw ,up-list)) ,keywords)
       `(cl-pushnew ,keywords ,up-list))))
 
-(defun use-package-extras-add-keywords ()
-  "Add use-package-extras keywords to `use-package-keywords'."
+(defun use-package-x-add-keywords ()
+  "Add use-package-x keywords to `use-package-keywords'."
   (setq use-package-keywords
         (mapcan
          (lambda (kw)
            (cond
             ((and (eq kw :if)
-                  (not (memq kw use-package-extras-conditional-keywords)))
-             `(:if ,@use-package-extras-conditional-keywords))
+                  (not (memq kw use-package-x-conditional-keywords)))
+             `(:if ,@use-package-x-conditional-keywords))
 
             ((and (eq kw :after)
-                  (not (memq kw use-package-extras-keywords)))
-             `(:after ,@use-package-extras-keywords))
+                  (not (memq kw use-package-x-keywords)))
+             `(:after ,@use-package-x-keywords))
 
             (t (list kw))))
          use-package-keywords)))
 
-(provide 'use-package-extras-core)
-;;; use-package-extras-core.el ends here
+(provide 'use-package-x-core)
+;;; use-package-x-core.el ends here

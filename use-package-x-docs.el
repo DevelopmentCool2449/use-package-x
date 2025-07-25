@@ -1,4 +1,4 @@
-;;; use-package-extras-docs.el --- :doc keywords definitions  -*- lexical-binding: t; -*-
+;;; use-package-x-docs.el --- :doc keywords definitions  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -28,26 +28,26 @@
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-extras-core)
+(require 'use-package-x-core)
 
 
 
-;;; Add keyword to `use-package-extras-keywords'
-(use-package-extras--add-to-list :doc)
+;;; Add keyword to `use-package-x-keywords'
+(use-package-x--add-to-list :doc)
 
 ;;; Functions
 
-(defun use-package-extras-normalize-always (_name _keyword args)
+(defun use-package-x-normalize-always (_name _keyword args)
   "Do nothing, return args."
   args)
 
-(defun use-package-extras-handle-always (name _keyword _args rest state)
+(defun use-package-x-handle-always (name _keyword _args rest state)
   "Do nothing."
   (use-package-concat (use-package-process-keywords name rest state)))
 
-(defalias 'use-package-normalize/:doc 'use-package-extras-normalize-always)
-(defalias 'use-package-handler/:doc 'use-package-extras-handle-always)
+(defalias 'use-package-normalize/:doc 'use-package-x-normalize-always)
+(defalias 'use-package-handler/:doc 'use-package-x-handle-always)
 
 
-(provide 'use-package-extras-docs)
-;;; use-package-extras-docs.el ends here
+(provide 'use-package-x-docs)
+;;; use-package-x-docs.el ends here
