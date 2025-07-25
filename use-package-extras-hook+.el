@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
-;; Author: Elijah Gabe Pérez <eg642616@gmail.com>
+;; Author: Elias G. Perez <eg642616@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,12 +23,20 @@
 ;; `use-package':
 ;;
 ;; * :hook+
-;;   An enchanted :hook which supports hooks depths.
+;;   An enchanted :hook which supports hooks depths and
+;;   set multiple functions.
+;;
 ;;   The hook depth is provided using the sub-keyword :depth
 ;;   e.g.
 ;;     :hook+
 ;;     (:depth 10
 ;;       (major-mode . my-func))
+;;
+;;   To set multiple functions (including lambdas) to the
+;;   hook or list of hooks you can use the :multi keyword:
+;;
+;;   :hook (my-hook-or-list-of-hooks
+;;           . (:multi fn1 fn2 (lambda () something)))
 ;;
 ;;   This also supports all the :hook
 ;;   valid forms:
@@ -38,6 +46,7 @@
 ;;       (major-mode . my-func-or-lambda)
 ;;       (mode mode2 mode3)
 ;;       single-mode)
+;;     ((hook1 hook2) . (:multi fn1 fn2 fn3))
 ;;     [and also use it as a normal :hook]
 ;;     (major-mode . my-func-or-lambda)
 ;;     (mode mode2 mode3)
@@ -56,24 +65,31 @@
 
 ;;; Functions
 (defun use-package-extras--normalize-pairs (list label name)
-  "Normalize all the pairs in the LIST."
-  (use-package-normalize-pairs
-   (lambda (k)
-     (or (use-package-non-nil-symbolp k)
-         (and k (let ((every t))
-                  (while (and every k)
-                    (if (and (consp k)
-                             (use-package-non-nil-symbolp (car k)))
-                        (setq k (cdr k))
-                      (setq every nil)))
-                  every))))
-   #'use-package-recognize-function
-   (if (string-suffix-p "-mode" (symbol-name name))
-       name
-     (intern (concat (symbol-name name) "-mode")))
-   label list))
+  "Normalize all the pairs in the LIST.
+This handle the :multi keyword"
+  (if (ignore-errors (eq (cadar list) :multi))
+      ;; FIXME: There is not a better way to include this into the
+      ;; loop (below), lets assume that the user is smart and knows what
+      ;; is they doing.
+      list
+    (use-package-normalize-pairs
+     (lambda (k)
+       (or (use-package-non-nil-symbolp k)
+           (and k (let ((every t))
+                    (while (and every k)
+                      (if (and (consp k)
+                               (use-package-non-nil-symbolp (car k)))
+                          (setq k (cdr k))
+                        (setq every nil)))
+                    every))))
+     #'use-package-recognize-function
+     (if (string-suffix-p "-mode" (symbol-name name))
+         name
+       (intern (concat (symbol-name name) "-mode")))
+     label list)))
 
 (defun use-package-normalize/:hook+ (name keyword args)
+  "Normalize :hook+ keyword, this handle the :depth keyword."
   (use-package-as-one (symbol-name keyword) args
     (lambda (label arg)
       (unless (or (use-package-non-nil-symbolp arg) (consp arg))
@@ -81,7 +97,8 @@
          (concat label
                  " must be"
                  " a <symbol> or a list or these"
-                 " or (<symbol or list of symbols> . <symbol or list of functions>)"
+                 " or (<symbol or list of symbols> . <function>)"
+                 " or (<symbol or list of symbols> . (:multi <functions> ...))"
                  " or (:depth <depth number> <any of previous forms>)")))
       ;; Check if :depth is defined
       ;; and return (<n-depth> (<the-hook-form>))
@@ -106,44 +123,59 @@
           list))
 
 (defun use-package-autoloads/:hook+ (_name _keyword args)
-  "Like `use-package-autoloads-mode' but for support the depth numbers."
-  (use-package-autoloads-mode
-   nil nil
-   (mapcar
-    (lambda (list)
-      (if (integerp (car list))
-          (cadr list)
-        list))
-    args)))
+  "Like `use-package-autoloads-mode' but supports the :depth and :multi keywords."
+  (setq args
+        (mapcar
+         (lambda (list)
+           (cond
+            ((integerp (car list)) (cadr list)) ;; :depth
+            (t list)))
+         args))
+
+  (cl-loop for x in args
+           for multi = (ignore-errors (eq (cadr x) :multi))
+           when (and (consp x) (or (use-package-non-nil-symbolp (cdr x)) multi))
+             if multi append
+               (cl-loop for cm in (cl-remove-if-not #'use-package-non-nil-symbolp (cddr x))
+                    collect (cons cm 'command))
+             else collect (cons (cdr x) 'command)))
+
+(defun use-package-extras--create-hook (sym fun depth)
+  "Return the proper `add-hook' for mode SYM with FUN and DEPTH if there is."
+  (let ((symname (symbol-name sym)))
+    (if (and (boundp sym)
+             ;; Yes, this also supports the
+             ;; `use-package-hook-name-suffix'... ¬¬
+             (not (string-suffix-p "-mode" symname)))
+        `(add-hook (quote ,sym) (function ,fun) ,depth)
+      `(add-hook
+        (quote ,(intern
+                 (concat symname use-package-hook-name-suffix)))
+        (function ,fun)
+        ,depth))))
 
 (defun use-package-handler/:hook+ (name _keyword args rest state)
+  "Hadle :hook+ keyword.
+Add the proper `add-hook' to use-package expanded form,
+in comparation with normal :hook, this handle hook depths and multiple
+functions."
   (use-package-concat
    (use-package-process-keywords name rest state)
    (cl-mapcan
     (lambda (def)
       (let* ((car (car def))
              (depth (if (integerp car) car))
-             (syms (if depth
-                       (caadr def)
-                     car))
-             (fun (if depth
-                      (cdadr def)
-                    (cdr def))))
+             (syms (if depth (caadr def) car))
+             (fun (if depth (cdadr def) (cdr def)))
+             (multi-p (and (listp fun) (eq (car fun) :multi))))
         (when fun
-          (mapcar
-           (lambda (sym)
-             (let ((symname (symbol-name sym)))
-               (if (and (boundp sym)
-                        ;; Yes, this also supports the
-                        ;; `use-package-hook-name-suffix'... ¬¬
-                        (not (string-suffix-p "-mode" symname)))
-                   `(add-hook (quote ,sym) (function ,fun) ,depth)
-                 `(add-hook
-                   (quote ,(intern
-                            (concat symname use-package-hook-name-suffix)))
-                   (function ,fun)
-                   ,depth))))
-           (use-package-hook-handler-normalize-mode-symbols syms)))))
+          (cl-loop
+           for mode in (use-package-hook-handler-normalize-mode-symbols syms)
+           if multi-p append
+             (cl-loop for fn in (cdr fun) collect
+                      (use-package-extras--create-hook mode fn depth))
+           else
+             collect (use-package-extras--create-hook mode fun depth)))))
     (use-package-extras--normalize-commands args))))
 
 (provide 'use-package-extras-hook+)

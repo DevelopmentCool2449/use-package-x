@@ -26,6 +26,7 @@
     (a-list-var     . '(a b c d))))
 
 ;;; :hook+
+;; Hook depth
 (pp-macroexpand-expression
  '(use-package test
     :hook+
@@ -35,11 +36,26 @@
       (a1 b1 c1)
       major-mode)
     ( :depth 5
-      (text-mode . auto-fill-mode))
+      ((test-mode1 test-mode2) . auto-fill-mode2))
     major-mode
     (a2 b2 c2)
-    (text-mode . auto-fill-mode)
+    (text-mode . auto-fill-mode3)
     (text-mode . (lambda () (test 2)))))
+
+;; Multiple functions
+(pp-macroexpand-expression
+ '(use-package test
+    :hook+
+    ((text-mode prog-mode)
+     . (:multi auto-fill-mode
+               show-paren-mode))
+    (org-mode
+     . (:multi (lambda () something)
+               org-indent-mode))
+    (:depth -4
+            (outline-mode
+             . (:multi (lambda () (print "-4 depth!"))
+                       outline-hide-body)))))
 
 ;;; :defvar-keymap
 (pp-macroexpand-expression

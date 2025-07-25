@@ -28,7 +28,10 @@ This uses the ~setopt~ function, for bind the variables.
 #+end_src
 
 ** :hook+
-An enchanted ~:hook~ which supports hooks depths.
+An enchanted ~:hook~ which supports hooks depths and set multiple
+functions in a single hook (or list of hooks).
+
++ :depth
 The hook depth is provided using the sub-keyword ~:depth~
 
 #+begin_src emacs-lisp
@@ -40,6 +43,27 @@ The hook depth is provided using the sub-keyword ~:depth~
     (a1 b1 c1))
   (:depth 5
     (text-mode . auto-fill-mode)))
+#+end_src
+
++ :multi
+To set multiple functions (including lambdas) into a single hook (or
+list of hooks), ~:hook+~ provides to ~:multi~ keyword, which you can use
+to set multiple functions without repeating the same ~:hook~ form.
+
+#+begin_src emacs-lisp
+(use-package test
+  :hook+
+  ((text-mode prog-mode)
+   . (:multi auto-fill-mode
+             show-paren-mode))
+  (org-mode
+   . (:multi (lambda () something)
+             org-indent-mode))
+  ;; This also supports the `:depth' keyword
+  (:depth -4
+          (outline-mode
+           . (:multi (lambda () (print "-4 depth!"))
+                     outline-hide-body))))
 #+end_src
 
 Also can work as another ~:hook~:
@@ -245,16 +269,17 @@ And ~:init (advice-remove ...)~
 
 * Installation and Usage
 
-Currently ~use-package-extras~ is not available in any Package Archive,
-but you can install it via ~package-vc-install~:
+~use-package-extras~ is available in GNU ELPA, you can install it using
+~package-install~:
 
-~M-x package-vc-install RET https://github.com/DevelopmentCool2449/use-package-extras RET~
+~M-x package-install RET use-package-extras RET~
 
 Alternatively using ~use-package~ ~:vc~ keyword:
 
 #+begin_src emacs-lisp
 (use-package use-package-extras
   :ensure t
+  ;; Alternatively using package-vc
   :vc ( :url "https://github.com/DevelopmentCool2449/use-package-extras"
         :rev :newest))
 #+end_src
