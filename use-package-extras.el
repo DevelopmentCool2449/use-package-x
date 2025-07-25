@@ -35,6 +35,8 @@
 ;; * :custom-face*
 ;; * :defvar-keymap
 ;; * :emacs< :emacs<= :emacs= :emacs> :emacs>=
+;; * :advice
+;; * :doc
 ;;
 
 ;;;; Code:

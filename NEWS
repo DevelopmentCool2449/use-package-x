@@ -1,0 +1,14 @@
+# -*- mode: org -*-
+
+* Initial Release: 0.0.1
+
+Initial release which includes the following keywords:
+
++ :setopt
++ :hook+
++ :which-key-replacement
++ :custom-face*
++ :defvar-keymap
++ :emacs< :emacs<= :emacs= :emacs> :emacs>=
++ :advice
++ :doc
