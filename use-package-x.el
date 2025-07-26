@@ -50,6 +50,7 @@
 (require 'use-package-x-custom-face*)
 (require 'use-package-x-docs)
 (require 'use-package-x-advice)
+(require 'use-package-x-local-set)
 
 (provide 'use-package-x)
 ;;; use-package-x.el ends here
