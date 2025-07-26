@@ -80,25 +80,26 @@
 (defun use-package-handler/:which-key-replacement (name _keyword args rest state)
   (use-package-concat
    (use-package-process-keywords name rest state)
-   `(,@(mapcar
-        #'(lambda (elt)
-            (let ((car (car elt)))
-              (cond ((stringp car)
-                     `(which-key-add-key-based-replacements ,car ,(cdr elt)))
-                    ((eq :keymap car)
-                     `(which-key-add-keymap-based-replacements ,(nth 1 elt)
-                        ,@(cl-loop for (key string command) in (cddr elt)
-                                   append `(,key
-                                            (quote (,string
-                                                    ;; For keymaps or functions
-                                                    . ,(if (consp command)
-                                                           (symbol-value (car command))
-                                                         command)))))))
-                    ((eq :mode car)
-                     `(which-key-add-major-mode-key-based-replacements ,(nth 1 elt)
-                        ,@(cl-loop for (key . replacement) in (cddr elt)
-                                   append `(,key ,replacement)))))))
-        args))))
+   (mapcar
+    #'(lambda (elt)
+        (let ((car (car elt)))
+          (cond ((stringp car)
+                 `(which-key-add-key-based-replacements ,car ,(cdr elt)))
+                ((eq :keymap car)
+                 `(which-key-add-keymap-based-replacements ,(nth 1 elt)
+                    ,@(cl-loop for (key string command) in (cddr elt)
+                               append `(,key
+                                        (quote
+                                         ,(cons string
+                                                ;; For keymaps or functions
+                                                (if (consp command)
+                                                    (symbol-value (car command))
+                                                  command)))))))
+                ((eq :mode car)
+                 `(which-key-add-major-mode-key-based-replacements ,(nth 1 elt)
+                    ,@(cl-loop for (key . replacement) in (cddr elt)
+                               append `(,key ,replacement)))))))
+    args)))
 
 (provide 'use-package-x-which-key-replacement)
 ;;; use-package-x-which-key-replacement.el ends here

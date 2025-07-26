@@ -44,6 +44,7 @@
 
 ;;; Functions
 (defun use-package-normalize/:setopt (_name keyword args)
+  "Normalize :setopt keyword, ensure the values in ARGS are valid."
   (mapcar
    (lambda (elt)
      (use-package-as-one (symbol-name keyword) (list elt)
@@ -58,7 +59,7 @@
 
 (defun use-package-handler/:setopt (name _keyword args rest state)
   (use-package-concat
-   `((,'setopt
+   `((setopt
       ,@(mapcan
          (lambda (list) (list (car list) (nth 1 list)))
          args)))

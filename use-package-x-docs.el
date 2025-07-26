@@ -36,16 +36,11 @@
 (use-package-x--add-to-list :doc)
 
 ;;; Functions
-
-(defun use-package-x-normalize-always (_name _keyword args)
-  "Do nothing, return args."
-  args)
-
 (defun use-package-x-handle-always (name _keyword _args rest state)
-  "Do nothing."
+  "Ignore args, do nothing, and return next use-package keyword."
   (use-package-concat (use-package-process-keywords name rest state)))
 
-(defalias 'use-package-normalize/:doc 'use-package-x-normalize-always)
+(defalias 'use-package-normalize/:doc 'always)
 (defalias 'use-package-handler/:doc 'use-package-x-handle-always)
 
 

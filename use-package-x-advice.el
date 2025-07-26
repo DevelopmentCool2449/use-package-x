@@ -59,15 +59,15 @@
 
 (defun use-package-handler/:advice (name _keyword args rest state)
   (use-package-concat
-   `(,@(mapcar
-        (lambda (elt)
-          (if (eq (car elt) :add)
-              (let ((fn (nth 1 elt))
-                    (how (nth 2 elt))
-                    (fn2 (nth 3 elt)))
-                `(advice-add (function ,fn) ,how (function ,fn2)))
-            `(advice-remove (function ,(nth 1 elt)) (function ,(nth 2 elt)))))
-        args))
+   (mapcar
+    (lambda (elt)
+      (if (eq (car elt) :add)
+          (let ((fn (nth 1 elt))
+                (how (nth 2 elt))
+                (fn2 (nth 3 elt)))
+            `(advice-add (function ,fn) ,how (function ,fn2)))
+        `(advice-remove (function ,(nth 1 elt)) (function ,(nth 2 elt)))))
+    args)
    (use-package-process-keywords name rest state)))
 
 

@@ -47,15 +47,18 @@
          (concat label
                  " value must be (:map <keymap> <string> #'<function> ...)"
                  " ensure `:map <keymap>' is in the list.")))
+      ;; For some reason this is returned as
+      ;; (nil (...))
+      ;; so, only return the list we want.
       (cdr (use-package-split-list-at-keys :map arg)))))
 
 (defun use-package-handler/:defvar-keymap (name _keyword args rest state)
   (use-package-concat
-   `(,@(mapcar
-        (lambda (elt)
-          `(defvar-keymap ,(car elt)
-             ,@(cdr elt)))
-        args))
+   (mapcar
+    (lambda (elt)
+      `(defvar-keymap ,(car elt)
+         ,@(cdr elt)))
+    args)
    (use-package-process-keywords name rest state)))
 
 (provide 'use-package-x-defvar-keymap)

@@ -100,9 +100,9 @@ This handle the :multi keyword"
                  " or (<symbol or list of symbols> . <function>)"
                  " or (<symbol or list of symbols> . (:multi <functions> ...))"
                  " or (:depth <depth number> <any of previous forms>)")))
-      ;; Check if :depth is defined
-      ;; and return (<n-depth> (<the-hook-form>))
-      ;; otherwise just return the list
+      ;; Check if :depth is defined and return (<n-depth>
+      ;; <the-hook-form>) for the handler function, otherwise just
+      ;; return the normal list
       (mapcan
        (lambda (elt)
          (if (eq (car-safe elt) :depth)
@@ -128,20 +128,22 @@ This handle the :multi keyword"
         (mapcar
          (lambda (list)
            (cond
-            ((integerp (car list)) (cadr list)) ;; :depth
+            ;; return the list without the depth number
+            ((integerp (car list)) (cadr list))
             (t list)))
          args))
 
   (cl-loop for x in args
            for multi = (ignore-errors (eq (cadr x) :multi))
            when (and (consp x) (or (use-package-non-nil-symbolp (cdr x)) multi))
-             if multi append
-               (cl-loop for cm in (cl-remove-if-not #'use-package-non-nil-symbolp (cddr x))
+           if multi append
+           (cl-loop for cm in (cddr x)
+                    if (use-package-non-nil-symbolp cm)
                     collect (cons cm 'command))
-             else collect (cons (cdr x) 'command)))
+           else collect (cons (cdr x) 'command)))
 
 (defun use-package-x--create-hook (sym fun depth)
-  "Return the proper `add-hook' for mode SYM with FUN and DEPTH if there is."
+  "Return the proper `add-hook' for mode SYM with FUN and DEPTH (if there is)."
   (let ((symname (symbol-name sym)))
     (if (and (boundp sym)
              ;; Yes, this also supports the
@@ -171,11 +173,11 @@ functions."
         (when fun
           (cl-loop
            for mode in (use-package-hook-handler-normalize-mode-symbols syms)
-           if multi-p append
-             (cl-loop for fn in (cdr fun) collect
-                      (use-package-x--create-hook mode fn depth))
+           if multi-p append ; For `:multi'
+           (cl-loop for fn in (cdr fun) collect
+                    (use-package-x--create-hook mode fn depth))
            else
-             collect (use-package-x--create-hook mode fun depth)))))
+           collect (use-package-x--create-hook mode fun depth)))))
     (use-package-x--normalize-commands args))))
 
 (provide 'use-package-x-hook+)

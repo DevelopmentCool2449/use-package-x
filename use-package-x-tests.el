@@ -77,7 +77,7 @@
     :which-key-replacement
     ("C-x" . "foo")
     ("C-c" . "bar")
-    (:keymap map
+    (:keymap my-map
              ("C-x" "foo" command-name)
              ("c" "prefix-map" (help-map))
              ("C-x" "foo" command-name))
