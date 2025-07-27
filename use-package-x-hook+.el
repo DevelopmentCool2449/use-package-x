@@ -159,7 +159,7 @@ This handle the :multi keyword"
 (defun use-package-handler/:hook+ (name _keyword args rest state)
   "Hadle :hook+ keyword.
 Add the proper `add-hook' to use-package expanded form,
-in comparation with normal :hook, this handle hook depths and multiple
+compared to normal :hook, this handle hook depths and multiple
 functions."
   (use-package-concat
    (use-package-process-keywords name rest state)

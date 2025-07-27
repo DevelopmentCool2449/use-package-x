@@ -143,25 +143,22 @@
     :advice (:remove my-function other-function)))
 
 ;;; :local-set
-;; Single value
-(pp-macroexpand-expression
- '(use-package test
-    :local-set
-    (var #'value)))
 
 ;; Multiple values
 (pp-macroexpand-expression
  '(use-package test-mode
     :local-set
-    (var1 #'value1)
-    (var2)))
+    ( var1 1
+      var2 2)))
 
 ;; Multiple values and hook
 (pp-macroexpand-expression
  '(use-package test
     :local-set
-    ((var1 #'value1)
-     (var2 #'value2)
-     :hook flymake-mode-hook
-     (flymake-var1 t)
-     (flymake-var2))))
+    ( var1 #'value1
+      var2 value1)
+    (:hook (flymake-mode-hook my-mode-hook)
+           flymake-var1 1
+           flymake-var2 2)
+    ( var1 #'value1
+      var2 value1)))

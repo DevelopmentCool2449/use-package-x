@@ -27,11 +27,11 @@
 ;;   Set variables locally to when entering to a mode.
 ;;
 ;;   :local-set
-;;   (<variable> <value>) <- Automatically set to package mode hook
+;;   (<variable> <value> ...) <- Automatically set to package mode hook
 ;;   or
-;;   (:mode mode <- Set it only to MODE hook
-;;     (<variable> <value>)
-;;     ...)
+;;   (:hook hook-or-list-of-hooks <- Set it only to hook(s),
+;;     <variable> <value>            compared to :hook and :hook+
+;;     ...)                          you need to add the full hook name
 
 
 ;;; Code:
@@ -45,53 +45,43 @@
 (use-package-x--add-to-list :local-set)
 
 (defun use-package-normalize/:local-set (_name keyword args)
-  "Normalize :local-set keyword."
+  "Normalize :local-set keyword, ensure ARGS are valid."
   (use-package-as-one (symbol-name keyword) args
     (lambda (label arg)
       (let ((arg-car (car arg)))
         (unless (or (eq arg-car :hook) (consp arg-car) (use-package-non-nil-symbolp arg-car))
           (use-package-error
            (concat label
-                   " can be (<symbol> [<optional value>])"
-                   " or ([<previous-form>]... :hook <symbol> <previous-form> ...)")))
-        ;; Return the proper list for the handler
-        (use-package-split-list-at-keys
-         :hook
-         (if (symbolp arg-car)
-             ;; For only a single value return it inside a list since the
-             ;; car can be misinterpreted as a hook
-             (list arg)
-           arg))))))
+                   " can be (<symbol> <value>...)"
+                   " or (:hook <symbol-hook> <symbol> <value> ...)")))
+        args))))
+
+(defun use-package-x-create-hook (hook values)
+  `(add-hook (quote ,hook)
+             (lambda (&rest _)
+               (setq-local ,@values))))
 
 (defun use-package-handler/:local-set (name _keyword args rest state)
   (use-package-concat
-   `(,@(mapcar
-        (lambda (elt)
-          (if-let* ((elt-car (car elt))
-                    ;; Get the hook (if there is)
-                    ((symbolp elt-car)))
-              ;; :hook
-              `(add-hook (quote ,elt-car)
-                         (lambda (&rest _)
-                           (setq-local
-                            ,@(mapcan
-                               (lambda (list) (list (car list) (nth 1 list)))
-                               (cdr elt)))))
-            ;; Plain variables
-            (let* ((sym-name (symbol-name name))
-                   (hook (intern (concat
-                                  sym-name
-                                  (if (string-suffix-p "-mode" sym-name)
-                                      "-hook"
-                                    "-mode-hook")
-                                  ))))
-              `(add-hook (quote ,hook)
-                         (lambda (&rest _)
-                           (setq-local
-                            ,@(mapcan
-                               (lambda (list) (list (car list) (nth 1 list)))
-                               elt)))))))
-        args))
+   (mapcan
+    (lambda (elt)
+      (if (eq (car elt) :hook)
+          ;; :hook
+          (if-let* ((hook (nth 1 elt))
+                    ((listp hook)))
+              (mapcar
+               (lambda (x) (use-package-x-create-hook x (cddr elt)))
+               hook)
+            (list (use-package-x-create-hook hook (cddr elt))))
+        ;; Plain variables
+        (let* ((sym-name (symbol-name name))
+               (hook (intern (concat
+                              sym-name
+                              (if (string-suffix-p "-mode" sym-name)
+                                  "-hook"
+                                "-mode-hook")))))
+          (list (use-package-x-create-hook hook elt)))))
+    args)
    (use-package-process-keywords name rest state)))
 
 (provide 'use-package-x-local-set)
