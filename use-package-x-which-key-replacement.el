@@ -29,7 +29,7 @@
 ;;    (use-package test
 ;;      :which-key-replacement
 ;;      ("C-x" . "foo")
-;;      ("C-c" . "bar")
+;;      ("C-c" . '("prefix" . "pretty name"))
 ;;      (:keymap map
 ;;               ("C-x" "foo" command-name)
 ;;               ("c" "mode-prefix" (prefix-map)))
@@ -48,6 +48,8 @@
 (use-package-x--add-to-list :which-key-replacement)
 
 ;;; Functions
+
+;;;###autoload
 (defun use-package-normalize/:which-key-replacement (_name keyword args)
   (let ((arg args)
         args*)
@@ -76,6 +78,7 @@
                    " or (:mode <symbol> (<string> . <string>))"))))))
     args*))
 
+;;;###autoload
 (defun use-package-handler/:which-key-replacement (name _keyword args rest state)
   (use-package-concat
    (use-package-process-keywords name rest state)

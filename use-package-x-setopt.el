@@ -43,6 +43,8 @@
 (use-package-x--add-to-list :setopt)
 
 ;;; Functions
+
+;;;###autoload
 (defun use-package-normalize/:setopt (_name keyword args)
   "Normalize :setopt keyword, ensure the values in ARGS are valid."
   (mapcar
@@ -57,6 +59,7 @@
          arg)))
    args))
 
+;;;###autoload
 (defun use-package-handler/:setopt (name _keyword args rest state)
   (use-package-concat
    `((setopt

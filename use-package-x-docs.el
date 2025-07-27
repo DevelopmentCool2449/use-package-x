@@ -40,7 +40,9 @@
   "Ignore args, do nothing, and return next use-package keyword."
   (use-package-concat (use-package-process-keywords name rest state)))
 
+;;;###autoload
 (defalias 'use-package-normalize/:doc 'always)
+;;;###autoload
 (defalias 'use-package-handler/:doc 'use-package-x-handle-always)
 
 

@@ -69,23 +69,36 @@ If version is a number, convert it to a string."
           (:emacs>= `(version<= ,version emacs-version)))))))
 
 ;;; :emacs<
+
+;;;###autoload
 (defalias 'use-package-normalize/:emacs< 'use-package-x-normalize-version)
+;;;###autoload
 (defalias 'use-package-handler/:emacs< 'use-package-handler/:if)
 
 ;;; :emacs<=
+;;;###autoload
 (defalias 'use-package-normalize/:emacs<= 'use-package-x-normalize-version)
+;;;###autoload
 (defalias 'use-package-handler/:emacs<= 'use-package-handler/:if)
 
 ;;; :emacs=
+;;;###autoload
 (defalias 'use-package-normalize/:emacs= 'use-package-x-normalize-version)
+;;;###autoload
 (defalias 'use-package-handler/:emacs= 'use-package-handler/:if)
 
 ;;; :emacs>
+
+;;;###autoload
 (defalias 'use-package-normalize/:emacs> 'use-package-x-normalize-version)
+;;;###autoload
 (defalias 'use-package-handler/:emacs> 'use-package-handler/:if)
 
 ;;; :emacs>=
+
+;;;###autoload
 (defalias 'use-package-normalize/:emacs>= 'use-package-x-normalize-version)
+;;;###autoload
 (defalias 'use-package-handler/:emacs>= 'use-package-handler/:if)
 
 (provide 'use-package-x-emacs-versions)

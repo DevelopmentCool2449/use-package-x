@@ -39,6 +39,8 @@
 (use-package-x--add-to-list :defvar-keymap)
 
 ;;; Functions
+
+;;;###autoload
 (defun use-package-normalize/:defvar-keymap (_name keyword args)
   (use-package-as-one (symbol-name keyword) args
     (lambda (label arg)
@@ -52,6 +54,7 @@
       ;; so, only return the list we want.
       (cdr (use-package-split-list-at-keys :map arg)))))
 
+;;;###autoload
 (defun use-package-handler/:defvar-keymap (name _keyword args rest state)
   (use-package-concat
    (mapcar

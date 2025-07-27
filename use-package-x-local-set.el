@@ -44,6 +44,7 @@
 ;;; Add keyword to `use-package-x-keywords'
 (use-package-x--add-to-list :local-set)
 
+;;;###autoload
 (defun use-package-normalize/:local-set (_name keyword args)
   "Normalize :local-set keyword, ensure ARGS are valid."
   (use-package-as-one (symbol-name keyword) args
@@ -61,6 +62,7 @@
              (lambda (&rest _)
                (setq-local ,@values))))
 
+;;;###autoload
 (defun use-package-handler/:local-set (name _keyword args rest state)
   (use-package-concat
    (mapcan

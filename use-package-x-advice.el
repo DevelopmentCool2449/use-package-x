@@ -43,6 +43,7 @@
 
 ;;; Functions
 
+;;;###autoload
 (defun use-package-normalize/:advice (_name keyword args)
   (mapcar
    (lambda (elt)
@@ -57,6 +58,7 @@
          arg)))
    args))
 
+;;;###autoload
 (defun use-package-handler/:advice (name _keyword args rest state)
   (use-package-concat
    (mapcar

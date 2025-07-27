@@ -40,8 +40,10 @@
 (use-package-x--add-to-list :custom-face*)
 
 ;;; Functions
+;;;###autoload
 (defalias 'use-package-normalize/:custom-face* 'use-package-normalize/:custom-face)
 
+;;;###autoload
 (defun use-package-handler/:custom-face* (name _keyword args rest state)
   (use-package-concat
    (mapcar #'(lambda (def)

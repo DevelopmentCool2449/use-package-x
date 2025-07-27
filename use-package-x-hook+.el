@@ -88,6 +88,7 @@ This handle the :multi keyword"
        (intern (concat (symbol-name name) "-mode")))
      label list)))
 
+;;;###autoload
 (defun use-package-normalize/:hook+ (name keyword args)
   "Normalize :hook+ keyword, this handle the :depth keyword."
   (use-package-as-one (symbol-name keyword) args
@@ -156,6 +157,7 @@ This handle the :multi keyword"
         (function ,fun)
         ,depth))))
 
+;;;###autoload
 (defun use-package-handler/:hook+ (name _keyword args rest state)
   "Hadle :hook+ keyword.
 Add the proper `add-hook' to use-package expanded form,
