@@ -75,7 +75,7 @@
 (pp-macroexpand-expression
  '(use-package test
     :which-key-replacement
-    ("C-x" . "foo")
+    ("C-x" . '("unicode" . "Unicode keys"))
     ("C-c" . "bar")
     (:keymap my-map
              ("C-x" "foo" command-name)

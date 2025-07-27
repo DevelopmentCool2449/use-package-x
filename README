@@ -104,8 +104,8 @@ A cons-cell for ~which-key-add-key-based-replacements~
 #+begin_src emacs-lisp
 (use-package test
   :which-key-replacement
-  ("C-x" . "foo")
-  ("C-c" . "bar")
+  ("C-c d" . "foo")
+  ("C-x 8" . '("unicode" . "Unicode keys"))
   ...)
 #+end_src
 
@@ -116,8 +116,8 @@ A list which specifies a keymap, for
 (use-package test
   :which-key-replacement
   (:keymap map
-           ("C-x" "foo" command-name)
-           ("C-c" "bar" command-name)
+           ("C-x g" "foo" command-name)
+           ("C-c a" "bar" (prefix-map))
            ...))
 #+end_src
 
@@ -128,7 +128,7 @@ Or a list which specifies a major mode, for
 (use-package test
   :which-key-replacement
   (:mode major-mode
-         ("C-x" . "foo")
+         ("C-x f" . "foo")
          ...))
 #+end_src
 
@@ -138,14 +138,14 @@ Any of these forms can be added together in the
 #+begin_src emacs-lisp
 (use-package test
   :which-key-replacement
-  ("C-x" . "foo")
-  ("C-c" . "bar")
+  ("C-x 8" . '("unicode" . "Unicode keys"))
+  ("C-c c" . "bar")
   (:keymap map
-           ("C-x" "foo" command-name)
-           ("C-c" "bar" command-name)
+           ("C-x e" "foo" command-name)
+           ("C-c g" "bar" command-name)
            ("p" "mode-prefix" (prefix-map)))
   (:mode major-mode
-         ("C-c" . "zzz")))
+         ("C-c h" . "zzz")))
 #+end_src
 
 ** :custom-face*

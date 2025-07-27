@@ -55,9 +55,8 @@
       (let ((x (car arg)))
         (cond
          ;; CONS-CELL
-         ((and (nlistp (cdr-safe x))
-               (stringp (car x))
-               (stringp (cdr x)))
+         ((and (consp x)
+               (stringp (car x)))
           (setq args* (nconc args* (list x)))
           (setq arg (cdr arg)))
          ;; KEYWORDS:
