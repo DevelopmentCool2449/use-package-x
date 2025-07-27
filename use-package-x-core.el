@@ -46,22 +46,5 @@ If LIST is non-nil, add them to LIST instead."
         `(mapc (lambda (kw) (cl-pushnew kw ,up-list)) ,keywords)
       `(cl-pushnew ,keywords ,up-list))))
 
-(defun use-package-x-add-keywords ()
-  "Add use-package-x keywords to `use-package-keywords'."
-  (setq use-package-keywords
-        (mapcan
-         (lambda (kw)
-           (cond
-            ((and (eq kw :if)
-                  (not (memq kw use-package-x-conditional-keywords)))
-             `(:if ,@use-package-x-conditional-keywords))
-
-            ((and (eq kw :after)
-                  (not (memq kw use-package-x-keywords)))
-             `(:after ,@use-package-x-keywords))
-
-            (t (list kw))))
-         use-package-keywords)))
-
 (provide 'use-package-x-core)
 ;;; use-package-x-core.el ends here

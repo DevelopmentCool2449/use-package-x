@@ -41,16 +41,43 @@
 
 ;;;; Code:
 
-;;; Import Keywords
-(require 'use-package-x-emacs-versions)
-(require 'use-package-x-setopt)
-(require 'use-package-x-hook+)
-(require 'use-package-x-which-key-replacement)
-(require 'use-package-x-defvar-keymap)
-(require 'use-package-x-custom-face*)
-(require 'use-package-x-docs)
-(require 'use-package-x-advice)
-(require 'use-package-x-local-set)
+;;; Requires
+(require 'use-package-x-core)
+
+;;; Functions
+;;;###autoload
+(defun use-package-x-add-keywords (&optional load-all)
+  "Add use-package-x loaded keywords to `use-package-keywords'.
+This add only the use-package-x keywords which were loaded, If you only
+put `(require 'use-package-x-setopt)' in your init file, only the
+:setopt keyword will be added to `use-package-keywords'.
+
+If LOAD-ALL is non-nil, load all the keywords"
+  (when load-all
+    (require 'use-package-x-emacs-versions)
+    (require 'use-package-x-setopt)
+    (require 'use-package-x-hook+)
+    (require 'use-package-x-which-key-replacement)
+    (require 'use-package-x-defvar-keymap)
+    (require 'use-package-x-custom-face*)
+    (require 'use-package-x-docs)
+    (require 'use-package-x-advice)
+    (require 'use-package-x-local-set))
+
+  (setq use-package-keywords
+        (mapcan
+         (lambda (kw)
+           (cond
+            ((and (eq kw :if)
+                  (not (memq kw use-package-x-conditional-keywords)))
+             `(:if ,@use-package-x-conditional-keywords))
+
+            ((and (eq kw :after)
+                  (not (memq kw use-package-x-keywords)))
+             `(:after ,@use-package-x-keywords))
+
+            (t (list kw))))
+         use-package-keywords)))
 
 (provide 'use-package-x)
 ;;; use-package-x.el ends here
