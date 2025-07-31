@@ -1,8 +1,10 @@
-;;; use-package-x-hook+.el --- :hook+ keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-hook.el --- :hook+ :hook-suffix keywords definitions  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
+;; Keywords: convenience, tools, extensions
+;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -19,8 +21,12 @@
 
 ;;; Commentary:
 
-;; This file provides the following extra keyword for
+;; This file provides the following extra keywords for
 ;; `use-package':
+;;
+;; * :hook-suffix
+;;   Change `use-package-hook-name-suffix' value to only the use-package
+;;   declaration.
 ;;
 ;; * :hook+
 ;;   An enchanted :hook which supports hooks depths and
@@ -36,10 +42,9 @@
 ;;   hook or list of hooks you can use the :multi keyword:
 ;;
 ;;   :hook (my-hook-or-list-of-hooks
-;;           . (:multi fn1 fn2 (lambda () something)))
+;;           . (:multi fn1 fn2 (lambda () ..) ...))
 ;;
-;;   This also supports all the :hook
-;;   valid forms:
+;;   This also supports the :hook valid forms:
 ;;
 ;;     :hook+
 ;;     (:depth 10
@@ -47,30 +52,51 @@
 ;;       (mode mode2 mode3)
 ;;       single-mode)
 ;;     ((hook1 hook2) . (:multi fn1 fn2 fn3))
-;;     [and also use it as a normal :hook]
+;;     ...and also use it as a normal :hook...
 ;;     (major-mode . my-func-or-lambda)
 ;;     (mode mode2 mode3)
 ;;     single-mode
 ;;
+;; To use them load this library in your init file:
+;;
+;;   (require 'use-package-x-hook)
 
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-x-core)
+(require 'use-package-core)
 
 
 
-;;; Add keyword to `use-package-x-keywords'
-(use-package-x--add-to-list :hook+)
-
 ;;; Functions
+
+;;; :hook-suffix
+;;;###autoload
+(defun use-package-normalize/:hook-suffix (_name keyword args)
+  "Normalize :hook-prefix, ensure it's a string or nil."
+  (use-package-only-one (symbol-name keyword) args
+    (lambda (label arg)
+      (unless (or (stringp arg) (null arg))
+        (use-package-error
+         (concat label " must be nil or a string")))
+      arg)))
+
+;;;###autoload
+(defun use-package-handler/:hook-suffix (name _keyword arg rest state)
+  "Normalize :hook-prefix.
+Set `use-package-hook-name-suffix' to ARG only in the current
+`use-package' declaration."
+  (dlet ((use-package-hook-name-suffix arg))
+    (use-package-process-keywords name rest state)))
+
+
+
+;;; :hook+
 (defun use-package-x--normalize-pairs (list label name)
-  "Normalize all the pairs in the LIST.
-This handle the :multi keyword"
+  "Normalize all the pairs in the LIST."
   (if (ignore-errors (eq (cadar list) :multi))
       ;; FIXME: There is not a better way to include this into the
-      ;; loop (below), lets assume that the user is smart and knows what
-      ;; is they doing.
+      ;; loop (below), so just return the LIST without normalizing.
       list
     (use-package-normalize-pairs
      (lambda (k)
@@ -90,7 +116,9 @@ This handle the :multi keyword"
 
 ;;;###autoload
 (defun use-package-normalize/:hook+ (name keyword args)
-  "Normalize :hook+ keyword, this handle the :depth keyword."
+  "Normalize :hook+ keyword.
+Return the proper list or ARGS for `use-package-autoloads/:hook+'
+and `use-package-handler/:hook+'."
   (use-package-as-one (symbol-name keyword) args
     (lambda (label arg)
       (unless (or (use-package-non-nil-symbolp arg) (consp arg))
@@ -100,7 +128,7 @@ This handle the :multi keyword"
                  " a <symbol> or a list or these"
                  " or (<symbol or list of symbols> . <function>)"
                  " or (<symbol or list of symbols> . (:multi <functions> ...))"
-                 " or (:depth <depth number> <any of previous forms>)")))
+                 " or (:depth <depth number> <any of previous forms>...)")))
       ;; Check if :depth is defined and return (<n-depth>
       ;; <the-hook-form>) for the handler function, otherwise just
       ;; return the normal list
@@ -147,8 +175,6 @@ This handle the :multi keyword"
   "Return the proper `add-hook' for mode SYM with FUN and DEPTH (if there is)."
   (let ((symname (symbol-name sym)))
     (if (and (boundp sym)
-             ;; Yes, this also supports the
-             ;; `use-package-hook-name-suffix'... ¬¬
              (not (string-suffix-p "-mode" symname)))
         `(add-hook (quote ,sym) (function ,fun) ,depth)
       `(add-hook
@@ -182,5 +208,5 @@ functions."
            collect (use-package-x--create-hook mode fun depth)))))
     (use-package-x--normalize-commands args))))
 
-(provide 'use-package-x-hook+)
-;;; use-package-x-hook+.el ends here
+(provide 'use-package-x-hook)
+;;; use-package-x-hook.el ends here

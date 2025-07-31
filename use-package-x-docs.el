@@ -1,8 +1,10 @@
-;;; use-package-x-docs.el --- :doc keywords definitions  -*- lexical-binding: t; -*-
+;;; use-package-x-docs.el --- :doc :tag keywords definitions  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
+;; Keywords: convenience, tools, extensions
+;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,33 +20,49 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; This file provides the following extra keyword for
+;; This file provides the following extra keywords for
 ;; `use-package':
 ;;
 ;; * :doc
-;;   Document your use-package declaration instead using comments
+;;   Document your use-package declaration instead of using comments.
 ;;
+;;     :doc <anything>...
+;;
+;; * :tag
+;;
+;;   Categorize your use-package declaration, this doesn't have any
+;;   effect.
+;;
+;;     :tag <anything>...
+;;
+;; To use them load this library in your init file:
+;;
+;;   (require 'use-package-x-docs)
 
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-x-core)
+(require 'use-package-core)
 
 
 
-;;; Add keyword to `use-package-x-keywords'
-(use-package-x--add-to-list :doc)
-
 ;;; Functions
+;;;###autoload
 (defun use-package-x-handle-always (name _keyword _args rest state)
-  "Ignore args, do nothing, and return next use-package keyword."
+  "Ignore ARGS, do nothing, and process the next `use-package' keyword."
   (use-package-concat (use-package-process-keywords name rest state)))
 
+;;; :doc
 ;;;###autoload
 (defalias 'use-package-normalize/:doc 'always)
 ;;;###autoload
 (defalias 'use-package-handler/:doc 'use-package-x-handle-always)
 
+;;; :tag
+;;;###autoload
+(defalias 'use-package-normalize/:tag 'always)
+;;;###autoload
+(defalias 'use-package-handler/:tag 'use-package-x-handle-always)
 
 (provide 'use-package-x-docs)
 ;;; use-package-x-docs.el ends here

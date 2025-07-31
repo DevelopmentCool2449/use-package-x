@@ -3,6 +3,8 @@
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
+;; Keywords: convenience, tools, extensions
+;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,25 +26,25 @@
 ;;
 ;; * :local-set
 ;;
-;;   Set variables locally to when entering to a mode.
+;;   Set variables locally when entering to a mode.
 ;;
-;;   :local-set
-;;   (<variable> <value> ...) <- Automatically set to package mode hook
-;;   or
-;;   (:hook hook-or-list-of-hooks <- Set it only to hook(s),
-;;     <variable> <value>            compared to :hook and :hook+
-;;     ...)                          you need to add the full hook name
-
+;;     :local-set
+;;     (<variable> <value> ...) <- Automatically set to package mode hook
+;;     --or--
+;;     (:hook <hook-or-list-of-hooks> <- Set it only to hook(s),
+;;       <variable> <value>              compared to :hook and :hook+
+;;       ...)                            you need to add the full hook name
+;;
+;; To use it load this library in your init file:
+;;
+;;   (require 'use-package-x-local-set)
 
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-x-core)
+(require 'use-package)
 
 
-
-;;; Add keyword to `use-package-x-keywords'
-(use-package-x--add-to-list :local-set)
 
 ;;;###autoload
 (defun use-package-normalize/:local-set (_name keyword args)
@@ -57,7 +59,7 @@
                    " or (:hook <symbol-hook> <symbol> <value> ...)")))
         args))))
 
-(defun use-package-x-create-hook (hook values)
+(defun use-package-x--local-hook (hook values)
   `(add-hook (quote ,hook)
              (lambda (&rest _)
                (setq-local ,@values))))
@@ -72,17 +74,17 @@
           (if-let* ((hook (nth 1 elt))
                     ((listp hook)))
               (mapcar
-               (lambda (x) (use-package-x-create-hook x (cddr elt)))
+               (lambda (x) (use-package-x--local-hook x (cddr elt)))
                hook)
-            (list (use-package-x-create-hook hook (cddr elt))))
-        ;; Plain variables
+            (list (use-package-x--local-hook hook (cddr elt))))
+        ;; plain variables
         (let* ((sym-name (symbol-name name))
                (hook (intern (concat
                               sym-name
                               (if (string-suffix-p "-mode" sym-name)
                                   "-hook"
                                 "-mode-hook")))))
-          (list (use-package-x-create-hook hook elt)))))
+          (list (use-package-x--local-hook hook elt)))))
     args)
    (use-package-process-keywords name rest state)))
 

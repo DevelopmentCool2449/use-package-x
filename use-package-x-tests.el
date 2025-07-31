@@ -59,17 +59,23 @@
              . (:multi (lambda () (print "-4 depth!"))
                        outline-hide-body)))))
 
-;;; :defvar-keymap
+;;; :hook-suffix
 (pp-macroexpand-expression
  '(use-package test
-    :defvar-keymap
-    ( :map test-mode-map
+    :hook-suffix "-functions"
+    :hook+
+    ((text-mode prog-mode)
+     . (:multi auto-fill-mode
+               show-paren-mode))))
+
+;;; :keymap-define
+(pp-macroexpand-expression
+ '(use-package test
+    :keymap-define
+    ( test-mode-map
       "C-x foo" #'command
       "C-x foo" (function)
-      "C-x foo"  #'command
-      :map another-test-mode-map
-      "C-c bar" #'command
-      "C-c bar"  #'command)))
+      "C-x foo"  #'command)))
 
 ;;; :which-key-replacement
 (pp-macroexpand-expression
@@ -83,7 +89,6 @@
              ("C-x" "foo" command-name))
     (:mode major-mode
            ("C-x" . "foo"))))
-
 
 ;;; :emacs<
 (pp-macroexpand-expression
@@ -133,23 +138,36 @@
     :doc This package does something
     :config (some-function)))
 
-;;; :advice
 (pp-macroexpand-expression
- '(use-package test
-    :advice (:add my-function :override other-function)))
+ '(use-package which-key
+    :tag "keys" "built-in"
+    :config (some-function)))
 
+;;; :advice-add
 (pp-macroexpand-expression
  '(use-package test
-    :advice (:remove my-function other-function)))
+    :advice-add (my-function :override other-function)))
+
+;;; :advice-remove
+(pp-macroexpand-expression
+ '(use-package test
+    :advice-remove (my-function other-function)))
 
 ;;; :local-set
 
-;; Multiple values
+;; Multiple values, same lambda
 (pp-macroexpand-expression
  '(use-package test-mode
     :local-set
     ( var1 1
       var2 2)))
+
+;; Multiple values, separated lambdas
+(pp-macroexpand-expression
+ '(use-package test-mode
+    :local-set
+    (var1 1)
+    (var2 2)))
 
 ;; Multiple values and hook
 (pp-macroexpand-expression

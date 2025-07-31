@@ -1,14 +1,17 @@
 # -*- mode: org -*-
 
-* Initial Release: 0.0.1
+* Development Release: 0.0.1
 
-Initial release which includes the following keywords:
+Development release which includes the following keywords:
 
 + :setopt
 + :hook+
++ :hook-suffix
 + :which-key-replacement
 + :custom-face*
-+ :defvar-keymap
++ :keymap-define
 + :emacs< :emacs<= :emacs= :emacs> :emacs>=
-+ :advice
++ :advice-add
++ :advice-remove
 + :doc
++ :tag

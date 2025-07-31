@@ -3,6 +3,8 @@
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
+;; Keywords: convenience, tools, extensions
+;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -26,38 +28,36 @@
 ;;   Similar to :custom, but can also bind plain variables.
 ;;   This uses the `setopt' function, for bind the variables.
 ;;
-;;   (<variable> . <value>)
+;;     :setopt (<variable> [value]) ...
 ;;
+;;   VALUE is optional, if omitted, VARIABLE will be set to nil.
+;;
+;; To use it load this library in your init file:
+;;
+;;   (require 'use-package-x-setopt)
 
 ;;; Code:
 
 ;;; Requires
-(require 'cl-lib)
 (require 'use-package)
 
-(require 'use-package-x-core)
-
 
-
-;;; Add keyword to `use-package-x-keywords'
-(use-package-x--add-to-list :setopt)
 
 ;;; Functions
 
 ;;;###autoload
 (defun use-package-normalize/:setopt (_name keyword args)
   "Normalize :setopt keyword, ensure the values in ARGS are valid."
-  (mapcar
-   (lambda (elt)
-     (use-package-as-one (symbol-name keyword) (list elt)
-       (lambda (label arg)
-         (unless (and (consp arg) (use-package-non-nil-symbolp (car arg)))
-           (use-package-error
-            (concat label
-                    " must be a (<symbol> [<optional value>])"
-                    " or a list of these")))
-         arg)))
-   args))
+  (use-package-as-one (symbol-name keyword) args
+    (lambda (label arg)
+      (unless (listp arg)
+        (use-package-error
+         (concat label
+                 " must be a (<symbol> [value])"
+                 " or a list of these")))
+      (if (use-package-non-nil-symbolp (car arg))
+          (list arg)
+        arg))))
 
 ;;;###autoload
 (defun use-package-handler/:setopt (name _keyword args rest state)

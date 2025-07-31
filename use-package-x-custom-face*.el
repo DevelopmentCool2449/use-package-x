@@ -3,6 +3,8 @@
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
+;; Keywords: convenience, tools, extensions
+;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -23,21 +25,18 @@
 ;; `use-package':
 ;;
 ;; * :custom-face*
-;;    Like :custom-face but override the face specs.
-;;    In Emacs 31 the :custom-face behavior was changed
-;;    making impossible to override face specs,
-;;    this keyword is intended for Emacs 31 users.
+;;   Like :custom-face but override the face specs.
 ;;
+;; To use it load this library in your init file:
+;;
+;;   (require 'use-package-x-custom-face*)
 
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-x-core)
+(require 'use-package-core)
 
 
-
-;;; Add keyword to `use-package-x-keywords'
-(use-package-x--add-to-list :custom-face*)
 
 ;;; Functions
 ;;;###autoload

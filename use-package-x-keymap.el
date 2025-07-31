@@ -1,8 +1,10 @@
-;;; use-package-x-defvar-keymap.el --- :defvar-keymap keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-keymap.el --- :defvar-keymap keyword definition  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
+;; Keywords: convenience, tools, extensions
+;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,40 +24,41 @@
 ;; This file provides the following extra keyword for
 ;; `use-package':
 ;;
-;; * :defvar-keymap
-;;    Define a keymap and bind it,
-;;    useful if you want to override an existent
-;;    keymap with your own keybindings.
+;; * :keymap-define
+;;    Define a new keymap or override an existent one.
+;;    The form is similar to `defvar-keymap' arguments, which see.
 ;;
+;;    :keymap-define
+;;    (my-mode-map
+;;      "C-x foo" #'bar
+;;      "C-x foo2" #'bar2)
+;;
+;; To use it load this library in your init file:
+;;
+;;   (require 'use-package-x-keymap)
 
 ;;; Code:
 
 ;;; Requires
-(require 'use-package-x-core)
+(require 'use-package-core)
 
 
-
-;;; Add keyword to `use-package-x-keywords'
-(use-package-x--add-to-list :defvar-keymap)
 
 ;;; Functions
 
 ;;;###autoload
-(defun use-package-normalize/:defvar-keymap (_name keyword args)
+(defun use-package-normalize/:keymap-define (_name keyword args)
   (use-package-as-one (symbol-name keyword) args
     (lambda (label arg)
-      (unless (eq (car arg) :map)
+      (unless (or (symbolp (car arg)) (listp arg))
         (use-package-error
          (concat label
-                 " value must be (:map <keymap> <string> #'<function> ...)"
-                 " ensure `:map <keymap>' is in the list.")))
-      ;; For some reason this is returned as
-      ;; (nil (...))
-      ;; so, only return the list we want.
-      (cdr (use-package-split-list-at-keys :map arg)))))
+                 " value must be"
+                 " (<keymap> <string> #'<function> ...)")))
+      args)))
 
 ;;;###autoload
-(defun use-package-handler/:defvar-keymap (name _keyword args rest state)
+(defun use-package-handler/:keymap-define (name _keyword args rest state)
   (use-package-concat
    (mapcar
     (lambda (elt)
@@ -64,5 +67,5 @@
     args)
    (use-package-process-keywords name rest state)))
 
-(provide 'use-package-x-defvar-keymap)
-;;; use-package-x-defvar-keymap.el ends here
+(provide 'use-package-x-keymap)
+;;; use-package-x-keymap.el ends here

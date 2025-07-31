@@ -6,8 +6,8 @@ additional keywords for a simple and cleaner configuration.
 
 #+begin_quote
 [!WARNING]
-This package is still under development, some keywords may not work as
-expected
+This package is still under development, some keywords may
+change their name and behavior
 #+end_quote
 
 This package provides the following extra keywords for ~use-package~:
@@ -95,6 +95,17 @@ And combine both forms together:
   (prog-mode . (lambda () (test 2))))
 #+end_src
 
+** :hook-suffix
+Allows change ~use-package-hook-name-suffix~ value to the use-package
+declaration where this is used.
+This is also supports ~:hook+~ and ~:hook~ keywords.
+
+#+begin_src emacs-lisp
+(use-package test
+  :hook-suffix "functions"
+  :hook+ (enable-theme . my/change-faces-function))
+#+end_src
+
 ** :which-key-replacement
 A simple way to set your which-key replacement keybindings
 The form can be a any of these options:
@@ -164,22 +175,18 @@ for Emacs 31 users.
   (test-face ((t :inherit error))))
 #+end_src
 
-** :defvar-keymap
+** :keymap-define
 Define a new keymap or override an existent one.
 
-The value must be a single list with ~:map~ and a ~keymap~
-following the ~key~ and ~definition~, similar to ~defvar-keymap~.
+The value must be a single list with a ~keymap~ following the ~key~ and
+~definition~, similar to ~defvar-keymap~.
 
 #+begin_src emacs-lisp
 (use-package test
   :defvar-keymap
-  (:map mode-map
-        "C-x foo" #'bar
-        "C-x foo2" #'bar2
-        ;; you can define multiple in the same list
-        :map another-mode-map
-        "C-c foo" #'bar
-        "C-c foo2" #'bar2))
+  (mode-map
+   "C-x foo" #'bar
+   "C-x foo2" #'bar2))
 #+end_src
 
 ** :emacs< :emacs<= :emacs= :emacs> :emacs>=
@@ -224,8 +231,9 @@ This also have compatibility with other ~use-package~ keywords
   :emacs< 31)
 #+end_src
 
-** :doc
-Document your use-package declaration instead using comments (does nothing)
+** :doc :tag
+Document or categorize your use-package declaration instead using
+comments (does nothing)
 
 The documentation can be anything:
 #+begin_src emacs-lisp
@@ -235,6 +243,7 @@ The documentation can be anything:
 Flymake collects diagnostic information from multiple sources,
 called backends, and visually annotates the buffer with the
 results."
+  :tag "built-in" "prog-mode"
   :config ...)
 #+end_src
 
@@ -246,26 +255,27 @@ Even symbols:
   Flymake collects diagnostic information from multiple sources,
   called backends, and visually annotates the buffer with the
   results.
+  :tag built-in prog-mode
   :config ...)
 #+end_src
 
-** :advice
-Shorthand for ~:init (advice-add ...)~:
+** :advice-add :advice-remove
+Shorthands for ~:init (advice-[add|remove] ...)~:
 
 #+begin_src emacs-lisp
 (use-package test
-  :advice
-  (:add my-function :override other-function)
+  :advice-add
+  (my-function :override other-function)
   ;; This also supports lambdas
-  (:add my-other-function :around
-        (lambda (...) ...)))
+  (my-other-function :around
+    (lambda (...) ...)))
 #+end_src
 
 And ~:init (advice-remove ...)~
 
 #+begin_src emacs-lisp
 (use-package test
-  :advice (:remove my-function other-function))
+  :advice-remove (my-function other-function))
 #+end_src
 
 ** :local-set
@@ -292,7 +302,7 @@ Alternatively you can specify a hook to bind the variables:
   (variable #'value
    variable 2
    ...)
-  (:hook org-agenda-mode-hook
+  (:hook org-agenda-mode-hook ; <- or a list of hooks
          variable 'symbol
          variable '(a list)
          ...))
@@ -316,25 +326,14 @@ Alternatively using ~use-package~ ~:vc~ keyword:
 #+end_src
 
 After it is already installed you can add the keywords to
-~use-package-keywords~ loading the keyword library and calling
-~use-package-x-add-keywords~:
+~use-package-keywords~ calling ~use-package-x-add-keywords~:
 
 #+begin_src emacs-lisp
 (use-package use-package-x
   :config
-  (require use-package-x-hook+)
-  (require use-package-x-setopt)
-  (require use-package-x-advice)
   (use-package-x-add-keywords))
 #+end_src
 
-If you want to use all the keywords, you can call
-~use-package-x-add-keywords~ with a non-nil argument.
-
-#+begin_src emacs-lisp
-(use-package use-package-x
-  ;; Load everything
-  :config (use-package-x-add-keywords t))
-#+end_src
+All the keywords are autoloaded, no need to use ~(require 'use-package-x-...)~
 
 #+html: <img src="https://raw.githubusercontent.com/DevelopmentCool2449/emacs-svg-badges/main/powered_by_org_mode.svg" align="right" width="10%" alt="Powered by Org Mode">
