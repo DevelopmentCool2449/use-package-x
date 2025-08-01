@@ -260,15 +260,21 @@ Even symbols:
 #+end_src
 
 ** :advice-add :advice-remove
-Shorthands for ~:init (advice-[add|remove] ...)~:
+Shorthands for ~:init (advice-[add|remove] ...)~
+
+~:advice-add~ allows to set multiple functions for the same advice
+keyword.
 
 #+begin_src emacs-lisp
 (use-package test
   :advice-add
-  (my-function :override other-function)
+  (:override (my-function other-function))
+  (:around (function-a function-b)
+           (function-c function-d))
   ;; This also supports lambdas
-  (my-other-function :around
-    (lambda (...) ...)))
+  (:around
+   (my-other-function
+    (lambda (...) ...))))
 #+end_src
 
 And ~:init (advice-remove ...)~

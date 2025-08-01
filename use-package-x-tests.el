@@ -146,7 +146,10 @@
 ;;; :advice-add
 (pp-macroexpand-expression
  '(use-package test
-    :advice-add (my-function :override other-function)))
+    :advice-add
+    (:override
+     (my-function other-function)
+     (my-function2 other-function2))))
 
 ;;; :advice-remove
 (pp-macroexpand-expression

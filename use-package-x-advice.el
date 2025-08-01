@@ -26,8 +26,9 @@
 ;;
 ;; * :advice-add
 ;;   A shorthand for ":init (advice-add ...)"
+;;   This allow to set multiple functions for the same advice keyword.
 ;;
-;;     :advice-add (my-function <ADVICE-ADD-HOW> other-function)
+;;     :advice-add (<ADVICE-ADD-HOW> (my-function other-function) ...)
 ;;
 ;; * :advice-remove
 ;;   A shorthand for ":init (advice-remove ...)"
@@ -47,40 +48,49 @@
 
 ;;; Functions
 
-;;;###autoload
-(defun use-package-x-normalize-advices (_name keyword args)
-  "Normalizer for :advice-add and :advice-remove."
-  (use-package-as-one (symbol-name keyword) args
-    (lambda (label arg)
-      (unless (and (consp arg))
-        (use-package-error
-         (concat label
-                 " must be a (<symbol> <advice-how-keyword> <symbol>)"
-                 " or list of these" label)))
-      args)))
-
 ;;; :advice-add
 
 ;;;###autoload
-(defalias 'use-package-normalize/:advice-add 'use-package-x-normalize-advices)
+(defun use-package-normalize/:advice-add (_name keyword args)
+  "Normalizer for :advice-add and :advice-remove."
+  (cl-loop for elt in args
+           unless (and (consp elt) (keywordp (car elt)))
+           do
+           (use-package-error
+            (concat (symbol-name keyword)
+                    " must be a (<advice-how-keyword> (<symbol> <symbol>)...)"
+                    " or list of these")))
+  args)
 
 ;;;###autoload
 (defun use-package-handler/:advice-add (name _keyword args rest state)
   (use-package-concat
-   (mapcar
+   (mapcan
     (lambda (elt)
-      (let ((fn (car elt))
-            (how (nth 1 elt))
-            (fn2 (nth 2 elt)))
-        `(advice-add (function ,fn) ,how (function ,fn2))))
+      (let ((how (car elt))
+            (functions (cdr elt)))
+        (mapcar
+         (lambda (x)
+           `(advice-add (function ,(car x)) ,how (function ,(cadr x))))
+         functions)))
     args)
    (use-package-process-keywords name rest state)))
 
 
 
 ;;; :advice-remove
+
 ;;;###autoload
-(defalias 'use-package-normalize/:advice-remove 'use-package-x-normalize-advices)
+(defun use-package-normalize/:advice-remove (_name keyword args)
+  "Normalizer for :advice-add and :advice-remove."
+  (use-package-as-one (symbol-name keyword) args
+    (lambda (label arg)
+      (unless (and (consp arg))
+        (use-package-error
+         (concat label
+                 " must be a (<symbol> <symbol>)"
+                 " or list of these" label)))
+      args)))
 
 ;;;###autoload
 (defun use-package-handler/:advice-remove (name _keyword args rest state)
