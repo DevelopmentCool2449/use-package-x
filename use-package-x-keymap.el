@@ -1,4 +1,4 @@
-;;; use-package-x-keymap.el --- :defvar-keymap keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-keymap.el --- :keymap-define and :keymap-set keywords definition  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 Free Software Foundation, Inc.
 
@@ -21,7 +21,7 @@
 
 ;;; Commentary:
 
-;; This file provides the following extra keyword for
+;; This file provides the following extra keywords for
 ;; `use-package':
 ;;
 ;; * :keymap-define
@@ -32,6 +32,12 @@
 ;;    (my-mode-map
 ;;      "C-x foo" #'bar
 ;;      "C-x foo2" #'bar2)
+;;
+;; * :keymap-set
+;;   Set keys to definitions in keymaps.
+;;   This is similar to `:bind' keyword, but this uses
+;;   `keymap-set', `keymap-set-after' and `keymap-global-set'
+;;   functions to bind the variables instead of `bind-key'
 ;;
 ;; To use it load this library in your init file:
 ;;
@@ -45,6 +51,8 @@
 
 
 ;;; Functions
+
+;;; :keymap-define
 
 ;;;###autoload
 (defun use-package-normalize/:keymap-define (_name keyword args)
@@ -66,6 +74,49 @@
          ,@(cdr elt)))
     args)
    (use-package-process-keywords name rest state)))
+
+
+
+;;; :keymap-set
+
+;;;###autoload
+(defun use-package-normalize/:keymap-set (_name keyword args)
+  (dolist (arg args)
+    (let ((x (car-safe arg)))
+      (unless (and x ; <- this already check if ARG is a list and is not empty
+                   (or (and (eq x :map) (symbolp (cadr arg)))
+                       (length= arg 3)
+                       (stringp x)))
+        (use-package-error
+         (concat (symbol-name keyword)
+                 " values must be (<key> <key-definition> [after-keymap])"
+                 " or (:map <keymap> <any-previous-forms> ...)")))))
+  args)
+
+(defun use-package-x--set-keymaps (list map)
+  "Return keymap functions."
+  (cond
+   ((length= list 3)
+    `(keymap-set-after ,map ,(car list) ,(nth 1 list) ,(nth 2 list)))
+   ((equal map '(current-global-map))
+    `(keymap-global-set ,(car list) ,(nth 1 list)))
+   (t `(keymap-set ,map ,(car list) ,(nth 1 list)))))
+
+;;;###autoload
+(defun use-package-handler/:keymap-set (name _keyword args rest state)
+  (use-package-concat
+   (use-package-process-keywords name rest state)
+   (mapcan
+    (lambda (elt)
+      (let ((map (if (eq (car elt) :map)
+                     (cadr elt)
+                   '(current-global-map))))
+
+        (if (stringp (car elt))
+            (list (use-package-x--set-keymaps elt map))
+          (cl-loop for x in (cddr elt)
+                   collect (use-package-x--set-keymaps x map)))))
+    args)))
 
 (provide 'use-package-x-keymap)
 ;;; use-package-x-keymap.el ends here

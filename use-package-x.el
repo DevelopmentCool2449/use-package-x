@@ -37,8 +37,9 @@
 ;; - :hook-suffix
 ;; - :hook+
 ;; - :keymap-define
-;; - :local-set
+;; - :keymap-set
 ;; - :setopt
+;; - :local-set
 ;; - :which-key-replacement
 ;; - :emacs<
 ;; - :emacs<=
@@ -46,7 +47,8 @@
 ;; - :emacs>
 ;; - :emacs>=
 ;;
-;; All these keywords will autoload only when you start use them
+;; All these keywords will autoload when used,
+;; No need for "(require 'use-package-x-...)".
 ;;
 
 ;;;; Code:
@@ -61,12 +63,14 @@
      :doc :tag
      :hook+
      :keymap-define
+     :keymap-set
      :local-set
      :setopt
      :which-key-replacement))
 
 (defvar use-package-x-before-keywords
-  '(:emacs< :emacs<= :emacs= :emacs> :emacs>= :hook-suffix))
+  '(:emacs< :emacs<= :emacs= :emacs> :emacs>= :hook-suffix)
+  "Keywords to add after :if.")
 
 ;;; Functions
 (defun use-package-x-add-keywords ()
@@ -75,10 +79,12 @@
         (mapcan
          (lambda (kw)
            (cond
+            ;; Add the conditional keywords after `:if'
             ((and (eq kw :if)
                   (not (memq kw use-package-x-before-keywords)))
              `(:if ,@use-package-x-before-keywords))
 
+            ;; Add the other keywords after `:after'
             ((and (eq kw :after)
                   (not (memq kw use-package-x-keywords)))
              `(:after ,@use-package-x-keywords))

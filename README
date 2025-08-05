@@ -190,6 +190,27 @@ The value must be a single list with a ~keymap~ as car following the ~key~ and
    "C-x foo2" #'bar2))
 #+end_src
 
+** :keymap-set
+Like ~:bind~, but uses ~keymap-set~, ~keymap-set-after~ and
+~keymap-global-set~ functions to bind the variables instead of ~bind-key~
+macros and family.
+
+#+begin_src emacs-lisp
+(use-package test
+  :keymap-set
+  ;; Global
+  ("C-x foo" #'command)
+  ("C-c bar" #'command 'after-map)
+  ;; keymap-set
+  (:map test-mode-map
+        ("C-x foo" #'command)
+        ("C-c bar" #'command))
+  ;; keymap-set-after
+  (:map my-menu-map
+        ("<action>" '("Action" . command) 'after-menu)
+        ("<drink>" '("Drink" . drink-command) 'eat)))
+#+end_src
+
 ** :emacs< :emacs<= :emacs= :emacs> :emacs>=
 Shorthands for ~:if (version-* emacs-version <version>)~, the version
 can be number or a string.

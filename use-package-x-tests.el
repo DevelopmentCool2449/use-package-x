@@ -74,21 +74,38 @@
     :keymap-define
     ( test-mode-map
       "C-x foo" #'command
-      "C-x foo" (function)
+      "C-x foo" (my-function)
       "C-x foo"  #'command)))
+
+;;; :keymap-set
+(pp-macroexpand-expression
+ '(use-package test
+    :keymap-set
+    ;; Global
+    ("C-x foo" #'command)
+    ("C-c bar" #'command 'after-map)
+    ;; keymap-set
+    (:map test-mode-map
+          ("C-x foo" #'command)
+          ("C-c bar" #'command))
+    ;; keymap-set-after
+    (:map my-menu-map
+          ("<action>" '("Action" . command) 'after-menu)
+          ("<drink>" '("Drink" . drink-command) 'eat))))
 
 ;;; :which-key-replacement
 (pp-macroexpand-expression
  '(use-package test
     :which-key-replacement
-    ("C-x" . '("unicode" . "Unicode keys"))
-    ("C-c" . "bar")
+    ("C-x 8" . '("unicode" . "Unicode keys"))
+    ("C-c d" . "foo")
     (:keymap my-map
-             ("C-x" "foo" command-name)
+             ("C-x a" "foo" command-name)
              ("c" "prefix-map" (help-map))
-             ("C-x" "foo" command-name))
+             ("C-x j" "foo" command-name))
     (:mode major-mode
-           ("C-x" . "foo"))))
+           ("C-x b" . "foo")
+           ("C-c g" . '("prefix" . "Pretty name")))))
 
 ;;; :emacs<
 (pp-macroexpand-expression
@@ -118,7 +135,7 @@
 ;; Compatibility with others keywords
 (pp-macroexpand-expression
  '(use-package test
-    :if t
+    :if (display-graphic-p)
     :emacs< 31))
 
 ;;; :custom-face*
