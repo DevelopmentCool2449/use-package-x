@@ -1,4 +1,7 @@
 COPYING
+Eask
 .elpaignore
+Makefile
+NEWS
 README
 use-package-x-tests.el
