@@ -95,12 +95,15 @@
 
 (defun use-package-x--set-keymaps (list map)
   "Return keymap functions."
-  (cond
-   ((length= list 3)
-    `(keymap-set-after ,map ,(car list) ,(nth 1 list) ,(nth 2 list)))
-   ((equal map '(current-global-map))
-    `(keymap-global-set ,(car list) ,(nth 1 list)))
-   (t `(keymap-set ,map ,(car list) ,(nth 1 list)))))
+  (let ((func (if (fboundp #'keymap-set-after)
+                  '(keymap-set-after keymap-global-set keymap-set)
+                '(define-key-after global-set-key define-key))))
+    (cond
+     ((length= list 3)
+      `(,(nth 0 func) ,map ,(car list) ,(nth 1 list) ,(nth 2 list)))
+     ((equal map '(current-global-map))
+      `(,(nth 1 func) ,(car list) ,(nth 1 list)))
+     (t `(,(nth 2 func) ,map ,(car list) ,(nth 1 list))))))
 
 ;;;###autoload
 (defun use-package-handler/:keymap-set (name _keyword args rest state)
