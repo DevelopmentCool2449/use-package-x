@@ -58,39 +58,29 @@
 
 ;;; Variables
 (defvar use-package-x-keywords
-  '( :advice-add :advice-remove
-     :custom-face*
-     :doc :tag
-     :hook+
-     :keymap-define
-     :keymap-set
-     :local-set
-     :setopt
-     :which-key-replacement))
-
-(defvar use-package-x-before-keywords
-  '(:emacs< :emacs<= :emacs= :emacs> :emacs>= :hook-suffix)
-  "Keywords to add after :if.")
+  '(((:advice-add :advice-remove) . :after)
+    (:custom-face* . :custom-face)
+    ((:doc :tag) . :preface)
+    (:hook-suffix . :preface)
+    (:hook+ . :hook)
+    ((:emacs< :emacs<= :emacs= :emacs> :emacs>=) . :if)
+    ((:keymap-define :keymap-set :which-key-replacement)
+     . :bind-keymap*)
+    ((:setopt :local-set) . :custom))
+  "Alist of keywords to insert in `use-package-keywords'.
+The CAR is the keyword(s) to insert, and the CDR the keyword to insert
+after that.")
 
 ;;; Functions
 (defun use-package-x-add-keywords ()
   "Add use-package-x keywords to `use-package-keywords'."
   (setq use-package-keywords
-        (mapcan
-         (lambda (kw)
-           (cond
-            ;; Add the conditional keywords after `:if'
-            ((and (eq kw :if)
-                  (not (memq kw use-package-x-before-keywords)))
-             `(:if ,@use-package-x-before-keywords))
-
-            ;; Add the other keywords after `:after'
-            ((and (eq kw :after)
-                  (not (memq kw use-package-x-keywords)))
-             `(:after ,@use-package-x-keywords))
-
-            (t (list kw))))
-         use-package-keywords)))
+        (let ((ret use-package-keywords))
+          (dolist (kw use-package-x-keywords)
+            (setq ret
+                  (flatten-tree
+                   (use-package-list-insert (car kw) ret (cdr kw) t))))
+          ret)))
 
 (provide 'use-package-x)
 ;;; use-package-x.el ends here

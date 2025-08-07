@@ -81,9 +81,8 @@
 (pp-macroexpand-expression
  '(use-package test
     :keymap-set
-    ;; Global
+    ;; keymap-global-set
     ("C-x foo" #'command)
-    ("C-c b" my-map 'after-map)
     ;; keymap-set
     (:map test-mode-map
           ("C-x foo" #'command)
@@ -92,13 +91,14 @@
           ("C-x foo" #'command)
           ("C-c bar" my-map))
     ;; keymap-set-after
+    ("C-c b" my-map 'after-map) ; Global
     (:map my-menu-map
           ("<action>" '("Action" . command) 'after-menu)
           ("<drink>" '("Drink" . drink-command) 'eat))))
 
 ;; Compatibility with :keymap-define
 ;; (:keymap-set expansion should appear after
-;;  :keymap-define expansion)
+;;  :keymap-define one)
 (pp-macroexpand-expression
  '(use-package test
     :keymap-define
@@ -108,7 +108,7 @@
       "C-x foo"  #'command)
     :keymap-set
     ;; Global
-    ("C-c b" my-map 'after-map)))
+    ("C-c b" my-map)))
 
 ;;; :which-key-replacement
 (pp-macroexpand-expression
