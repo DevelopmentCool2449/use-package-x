@@ -28,16 +28,19 @@
 ;;    Define a new keymap or override an existent one.
 ;;    The form is similar to `defvar-keymap' arguments, which see.
 ;;
-;;    :keymap-define
-;;    (my-mode-map
-;;      "C-x foo" #'bar
-;;      "C-x foo2" #'bar2)
+;;      :keymap-define
+;;      (my-mode-map
+;;        "C-x foo" #'bar
+;;        "C-x foo2" #'bar2)
 ;;
 ;; * :keymap-set
 ;;   Set keys to definitions in keymaps.
 ;;   This is similar to `:bind' keyword, but this uses
 ;;   `keymap-set', `keymap-set-after' and `keymap-global-set'
-;;   functions to bind the variables instead of `bind-key'
+;;   functions to bind the variables instead of `bind-key'.
+;;
+;;   :keymap-set
+;;
 ;;
 ;; To use it load this library in your init file:
 ;;
@@ -84,7 +87,9 @@
   (dolist (arg args)
     (let ((x (car-safe arg)))
       (unless (and x ; <- this already check if ARG is a list and is not empty
-                   (or (and (eq x :map) (symbolp (cadr arg)))
+                   (or (and (eq x :map)
+                            (or (symbolp (cadr arg))
+                                (listp (cadr arg))))
                        (length= arg 3)
                        (stringp x)))
         (use-package-error
@@ -115,10 +120,18 @@
                      (cadr elt)
                    '(current-global-map))))
 
-        (if (stringp (car elt))
-            (list (use-package-x--set-keymaps elt map))
-          (cl-loop for x in (cddr elt)
-                   collect (use-package-x--set-keymaps x map)))))
+        (cond ((stringp (car elt))
+               (list (use-package-x--set-keymaps elt map)))
+              ((and (eq (car elt) :map) (listp (cadr elt)))
+               (cl-loop
+                for i in map append
+                (cl-loop
+                 for x in (cddr elt)
+                 collect (use-package-x--set-keymaps x i))))
+              (t
+               (cl-loop
+                for x in (cddr elt) collect
+                (use-package-x--set-keymaps x map))))))
     args)))
 
 (provide 'use-package-x-keymap)

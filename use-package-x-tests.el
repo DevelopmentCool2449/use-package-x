@@ -88,6 +88,9 @@
     (:map test-mode-map
           ("C-x foo" #'command)
           ("C-c bar" my-map))
+    (:map (my-map1 my-map2)
+          ("C-x foo" #'command)
+          ("C-c bar" my-map))
     ;; keymap-set-after
     (:map my-menu-map
           ("<action>" '("Action" . command) 'after-menu)

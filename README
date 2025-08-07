@@ -195,20 +195,51 @@ Like ~:bind~, but uses ~keymap-set*~ functions family
 /(or ~define-key*~ for Emacs versions prior 29.1)/ to bind the variables
 instead of ~bind-key~ macros and family.
 
+Compared to ~:bind~, the key definitions are plain lists instead of
+cons-cells.
+
+#+begin_src emacs-lisp
+(use-package test
+  :keymap-set
+  ;; Bind to the Current global map,
+  ;; analogous to `keymap-global-set'
+  ("C-x foo" #'command)
+  ("C-c bar" #'another-command))
+#+end_src
+
+If you want to use it for modify a menu, add a 3rd element to the
+list.
+
 #+begin_src emacs-lisp
 (use-package test
   :keymap-set
   ;; Global
-  ("C-x foo" #'command)
-  ("C-c bar" #'command 'after-map)
-  ;; keymap-set
-  (:map test-mode-map
-        ("C-x foo" #'command)
-        ("C-c bar" #'command))
-  ;; keymap-set-after
-  (:map my-menu-map
-        ("<action>" '("Action" . command) 'after-menu)
-        ("<drink>" '("Drink" . drink-command) 'eat)))
+  ;; analogous to `keymap-set-after'
+  ("<drink>" '("Drink" . drink-command) 'eat)
+  ("<menu-bar> <signals> <work>" '("Work" . work-command) 'break))
+#+end_src
+
+You can specify a keymap to bind the keys, use the ~:map~ keyword for
+that.
+
+#+begin_src elisp
+(use-package test
+  :keymap-set
+  (:map shell-mode-map
+        ("TAB" 'completion-at-point)
+        ("<menu-bar> <signals> <work>"
+         '("Work" . work-command) 'break)))
+#+end_src
+
+Additionally you can use a list of keymaps for bind the keys for each
+keymap in that list:
+
+#+begin_src elisp
+(use-package test
+  :keymap-set
+  (:map (bar-mode-map baz-mode-map)
+        ("C-c x" . cmd1)
+        ("C-c y" . cmd2)))
 #+end_src
 
 ** :emacs< :emacs<= :emacs= :emacs> :emacs>=
