@@ -49,24 +49,24 @@
  '(use-package test
     :hook+
     ((text-mode prog-mode)
-     . (:multi auto-fill-mode
-               show-paren-mode))
+     (auto-fill-mode
+      show-paren-mode))
     (org-mode
-     . (:multi (lambda () something)
-               org-indent-mode))
+     ((lambda () something)
+      org-indent-mode))
     (:depth -4
             (outline-mode
-             . (:multi (lambda () (print "-4 depth!"))
-                       outline-hide-body)))))
+             ((lambda () (print "-4 depth!"))
+              outline-hide-body)))))
 
 ;;; :hook-suffix
 (pp-macroexpand-expression
  '(use-package test
-    :hook-suffix "-functions"
+    :hook-suffix nil
     :hook+
-    ((text-mode prog-mode)
-     . (:multi auto-fill-mode
-               show-paren-mode))))
+    ((text-mode-hook prog-mode-hook)
+     (auto-fill-mode
+      show-paren-mode))))
 
 ;;; :keymap-define
 (pp-macroexpand-expression

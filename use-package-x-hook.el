@@ -39,10 +39,10 @@
 ;;       (major-mode . my-func))
 ;;
 ;;   To set multiple functions (including lambdas) to the
-;;   hook or list of hooks you can use the :multi keyword:
+;;   hook or list of hooks you can use a list:
 ;;
 ;;   :hook (my-hook-or-list-of-hooks
-;;           . (:multi fn1 fn2 (lambda () ..) ...))
+;;           (fn1 fn2 (lambda () ..) ...))
 ;;
 ;;   This also supports the :hook valid forms:
 ;;
@@ -51,7 +51,7 @@
 ;;       (major-mode . my-func-or-lambda)
 ;;       (mode mode2 mode3)
 ;;       single-mode)
-;;     ((hook1 hook2) . (:multi fn1 fn2 fn3))
+;;     ((hook1 hook2) (fn1 fn2 fn3))
 ;;     ...and also use it as a normal :hook...
 ;;     (major-mode . my-func-or-lambda)
 ;;     (mode mode2 mode3)
@@ -94,9 +94,9 @@ Set `use-package-hook-name-suffix' to ARG only in the current
 ;;; :hook+
 (defun use-package-x--normalize-pairs (list label name)
   "Normalize all the pairs in the LIST."
-  (if (ignore-errors (eq (cadar list) :multi))
+  (if (consp (car-safe (cdr-safe (car list))))
       ;; FIXME: There is not a better way to include this into the
-      ;; loop (below), so just return the LIST without normalizing.
+      ;; loop (below), so just return the LIST without normalizing it.
       list
     (use-package-normalize-pairs
      (lambda (k)
@@ -127,7 +127,7 @@ and `use-package-handler/:hook+'."
                  " must be"
                  " a <symbol> or a list or these"
                  " or (<symbol or list of symbols> . <function>)"
-                 " or (<symbol or list of symbols> . (:multi <functions> ...))"
+                 " or (<symbol or list of symbols> (<functions> ...))"
                  " or (:depth <depth number> <any of previous forms>...)")))
       ;; Check if :depth is defined and return (<n-depth>
       ;; <the-hook-form>) for the handler function, otherwise just
@@ -152,7 +152,7 @@ and `use-package-handler/:hook+'."
           list))
 
 (defun use-package-autoloads/:hook+ (_name _keyword args)
-  "Like `use-package-autoloads-mode' but supports the :depth and :multi keywords."
+  "Like `use-package-autoloads-mode' but supports the :depth keyword and funcs."
   (setq args
         (mapcar
          (lambda (list)
@@ -163,10 +163,10 @@ and `use-package-handler/:hook+'."
          args))
 
   (cl-loop for x in args
-           for multi = (ignore-errors (eq (cadr x) :multi))
+           for multi = (consp (car-safe (cdr x)))
            when (and (consp x) (or (use-package-non-nil-symbolp (cdr x)) multi))
            if multi append
-           (cl-loop for cm in (cddr x)
+           (cl-loop for cm in (nth 1 x)
                     if (use-package-non-nil-symbolp cm)
                     collect (cons cm 'command))
            else collect (cons (cdr x) 'command)))
@@ -196,13 +196,14 @@ functions."
       (let* ((car (car def))
              (depth (if (integerp car) car))
              (syms (if depth (caadr def) car))
+             ;; FUN can be a function or a list
              (fun (if depth (cdadr def) (cdr def)))
-             (multi-p (and (listp fun) (eq (car fun) :multi))))
+             (multi-p (consp (car-safe fun))))
         (when fun
           (cl-loop
            for mode in (use-package-hook-handler-normalize-mode-symbols syms)
-           if multi-p append ; For `:multi'
-           (cl-loop for fn in (cdr fun) collect
+           if multi-p append ; For multiple funcs
+           (cl-loop for fn in (car fun) collect
                     (use-package-x--create-hook mode fn depth))
            else
            collect (use-package-x--create-hook mode fun depth)))))

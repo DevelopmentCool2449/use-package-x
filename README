@@ -33,7 +33,6 @@ This uses the ~setopt~ function, for bind the variables.
 An enchanted ~:hook~ which supports hooks depths and set multiple
 functions in a single hook (or for each hook).
 
-+ :depth
 The hook depth is provided using the sub-keyword ~:depth~
 
 #+begin_src emacs-lisp
@@ -47,25 +46,22 @@ The hook depth is provided using the sub-keyword ~:depth~
     (text-mode . auto-fill-mode)))
 #+end_src
 
-+ :multi
 To set multiple functions (including lambdas) into a single hook (or
-list of hooks), ~:hook+~ provides to ~:multi~ keyword, which you can use
-to set multiple functions without repeating the same ~:hook~ form.
+list of hooks) without repeating the same ~:hook~ form, you can use a
+list of functions.
 
 #+begin_src emacs-lisp
 (use-package test
   :hook+
-  ((text-mode prog-mode)
-   . (:multi auto-fill-mode
-             show-paren-mode))
-  (org-mode
-   . (:multi (lambda () something)
-             org-indent-mode))
+  ((text-mode prog-mode) (auto-fill-mode
+                          show-paren-mode))
+  (org-mode (org-indent-mode
+             (lambda () something)))
   ;; This also supports the `:depth' keyword
   (:depth -4
           (outline-mode
-           . (:multi (lambda () (print "-4 depth!"))
-                     outline-hide-body))))
+           ((lambda () (print "-4 depth!"))
+            outline-hide-body))))
 #+end_src
 
 Also can work as another ~:hook~:
@@ -90,21 +86,24 @@ And combine both forms together:
   (:depth 5
     (text-mode-2 . auto-fill-mode))
   (:depth -8 my-mode-hook)
-  (lisp-mode . (:multi fn1 fn2 (lambda () ...))
+  (lisp-mode (fn1 fn2 (lambda () ...))
   (a2 b2 c2)
   (prog-mode . auto-fill-mode)
   (prog-mode . (lambda () (test 2))))
 #+end_src
 
 ** :hook-suffix
-Allows to change ~use-package-hook-name-suffix~ value to the use-package
-declaration where this is used.
+Allows to change ~use-package-hook-name-suffix~ value to the current
+use-package declaration where this is used.
+
 This is also supports ~:hook+~ and ~:hook~ keywords.
 
 #+begin_src emacs-lisp
 (use-package test
-  :hook-suffix "functions"
-  :hook+ (enable-theme . my/change-faces-function))
+  :hook-suffix nil
+  :hook+
+  (c-mode-hook . my/function)
+  (enable-theme-functions . my/change-faces-function))
 #+end_src
 
 ** :which-key-replacement
@@ -219,8 +218,8 @@ list.
   ("<menu-bar> <signals> <work>" '("Work" . work-command) 'break))
 #+end_src
 
-You can specify a keymap to bind the keys, use the ~:map~ keyword for
-that.
+
+For specify a keymap to bind the keys, use the ~:map~ sub-keyword.
 
 #+begin_src elisp
 (use-package test
@@ -316,7 +315,7 @@ Even symbols:
 Shorthands for ~:init (advice-[add|remove] ...)~
 
 + ~:advice-add~
-Allows to set multiple functions for the same `advice-add`
+Allows to set multiple functions for the same ~advice-add~
 context.
 
 #+begin_src emacs-lisp
