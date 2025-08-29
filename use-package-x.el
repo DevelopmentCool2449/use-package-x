@@ -5,7 +5,7 @@
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Homepage: https://github.com/DevelopmentCool2449/use-package-x
 ;; Created: 2025-07-13
-;; Package-Requires: ((emacs "24.3") use-package)
+;; Package-Requires: ((emacs "24.3") (compat "29.1") use-package)
 ;; Keywords: convenience, extensions
 ;; Version: 0.0.1
 

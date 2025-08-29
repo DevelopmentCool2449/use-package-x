@@ -190,9 +190,8 @@ The value must be a single list with a ~keymap~ as car following the ~key~ and
 #+end_src
 
 ** :keymap-set
-Like ~:bind~, but uses ~keymap-set*~ functions family
-/(or ~define-key*~ for Emacs versions prior 29.1)/ to bind the variables
-instead of ~bind-key~ macros and family.
+Like ~:bind~, but uses ~keymap-*~ functions to bind the variables instead
+of ~bind-key~ macros.
 
 Compared to ~:bind~, the key definitions are plain lists instead of
 cons-cells.
