@@ -9,6 +9,7 @@ Development release which includes the following keywords:
 + :hook-suffix
 + :which-key-replacement
 + :custom-face*
++ :custom-icon
 + :keymap-define
 + :emacs< :emacs<= :emacs= :emacs> :emacs>=
 + :advice-add

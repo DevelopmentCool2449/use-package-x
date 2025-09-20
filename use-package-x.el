@@ -32,6 +32,7 @@
 ;; - :advice-add
 ;; - :advice-remove
 ;; - :custom-face*
+;; - :custom-icon
 ;; - :doc
 ;; - :tag
 ;; - :hook-suffix
@@ -59,7 +60,7 @@
 ;;; Variables
 (defvar use-package-x-keywords
   '(((:advice-add :advice-remove) . :after)
-    (:custom-face* . :custom-face)
+    ((:custom-face* :custom-icon) . :custom-face)
     ((:doc :tag) . :preface)
     (:hook-suffix . :preface)
     (:hook+ . :hook)

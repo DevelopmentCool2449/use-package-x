@@ -161,6 +161,13 @@
     :custom-face*
     (test-face ((t :inherit error)))))
 
+;;; :custom-icon
+(pp-macroexpand-expression
+ '(use-package tab-line
+    :custom-icon
+    (tab-line-new ((symbol "•")))
+    (tab-line-close-modified ((text " x " :face shadow)))))
+
 ;;; :doc
 (pp-macroexpand-expression
  '(use-package test

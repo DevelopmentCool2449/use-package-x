@@ -1,14 +1,18 @@
 # -*- mode: org -*-
 * use-package-x
 
+#+begin_quote
+[!NOTE]
+
+The Maintenance of this package in on pause due to its possible
+inclusion to Emacs core or GNU ELPA, thus some keywords and its syntax
+may change.
+
+I apologize for the inconvenience.
+#+end_quote
+
 use-package-x is an extension for use-package which provides
 additional keywords for a simple and cleaner configuration.
-
-#+begin_quote
-[!WARNING]
-This package is still under development, some keywords may
-change their name and behavior
-#+end_quote
 
 This package provides the following extra keywords for ~use-package~:
 
@@ -173,6 +177,18 @@ for Emacs 31 users.
 (use-package test
   :custom-face*
   (test-face ((t :inherit error))))
+#+end_src
+
+** :custom-icon
+Like ~:custom~ but for setting/changing custom icons, this uses a
+~:custom-face~-like spec for set the icons (See ~custom-set-icons~
+function for how to use this spec).
+
+#+begin_src emacs-lisp
+(use-package tab-line
+  :custom-icon
+  (tab-line-new ((symbol "•")))
+  (tab-line-close-modified ((text " x " :face shadow))))
 #+end_src
 
 ** :keymap-define
