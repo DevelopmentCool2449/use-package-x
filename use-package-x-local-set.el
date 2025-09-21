@@ -40,6 +40,7 @@
 ;;   (require 'use-package-x-local-set)
 
 ;;; Code:
+;;; NOTE: Should this use `setq-mode-local' instead?
 
 ;;; Requires
 (require 'use-package)

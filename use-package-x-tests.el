@@ -224,3 +224,9 @@
            flymake-var2 2)
     ( var1 #'value1
       var2 value1)))
+
+;;; :mark
+
+(pp-macroexpand-expression
+ '(use-package test
+    :mark t))

@@ -1,5 +1,11 @@
 # -*- mode: org -*-
-* use-package-x
+#+export_file_name: use-package-x.texi
+#+texinfo_dir_category: Emacs misc features
+#+texinfo_dir_title: use-package-x.
+#+texinfo_dir_desc: use-package-x User Manual.
+
+#+title: use-package-x
+#+author: Elias G. Perez
 
 #+begin_quote
 [!NOTE]
@@ -16,7 +22,7 @@ additional keywords for a simple and cleaner configuration.
 
 This package provides the following extra keywords for ~use-package~:
 
-** :setopt
+* :setopt
 
 Similar to :custom, but can also bind plain variables.
 
@@ -33,7 +39,7 @@ This uses the ~setopt~ function, for bind the variables.
   (dired-omit-verbose))
 #+end_src
 
-** :hook+
+* :hook+
 An enchanted ~:hook~ which supports hooks depths and set multiple
 functions in a single hook (or for each hook).
 
@@ -96,7 +102,7 @@ And combine both forms together:
   (prog-mode . (lambda () (test 2))))
 #+end_src
 
-** :hook-suffix
+* :hook-suffix
 Allows to change ~use-package-hook-name-suffix~ value to the current
 use-package declaration where this is used.
 
@@ -110,7 +116,7 @@ This is also supports ~:hook+~ and ~:hook~ keywords.
   (enable-theme-functions . my/change-faces-function))
 #+end_src
 
-** :which-key-replacement
+* :which-key-replacement
 A simple way to set your which-key replacement keybindings
 The form can be a any of these options:
 
@@ -163,7 +169,7 @@ Any of these forms can be added together in the
          ("C-c h" . "zzz")))
 #+end_src
 
-** :custom-face*
+* :custom-face*
 Like :custom-face but override the face specs.
 
 #+begin_quote
@@ -179,7 +185,7 @@ for Emacs 31 users.
   (test-face ((t :inherit error))))
 #+end_src
 
-** :custom-icon
+* :custom-icon
 Like ~:custom~ but for setting/changing custom icons, this uses a
 ~:custom-face~-like spec for set the icons (See ~custom-set-icons~
 function for how to use this spec).
@@ -191,7 +197,7 @@ function for how to use this spec).
   (tab-line-close-modified ((text " x " :face shadow))))
 #+end_src
 
-** :keymap-define
+* :keymap-define
 Define a new keymap or override an existent one.
 
 The value must be a single list with a ~keymap~ as car following the ~key~ and
@@ -205,7 +211,7 @@ The value must be a single list with a ~keymap~ as car following the ~key~ and
    "C-x foo2" #'bar2))
 #+end_src
 
-** :keymap-set
+* :keymap-set
 Like ~:bind~, but uses ~keymap-*~ functions to bind the variables instead
 of ~bind-key~ macros.
 
@@ -256,7 +262,7 @@ keymap in that list:
         ("C-c y" . cmd2)))
 #+end_src
 
-** :emacs< :emacs<= :emacs= :emacs> :emacs>=
+* :emacs<, :emacs<=, :emacs=, :emacs>, :emacs>=
 Shorthands for ~:if (version-* emacs-version <version>)~, the version
 can be number or a string.
 
@@ -298,7 +304,7 @@ This also have compatibility with other ~use-package~ conditional keywords
   :emacs< 31)
 #+end_src
 
-** :doc :tag
+* :doc, :tag
 Document or categorize your use-package declaration instead using
 comments (does nothing)
 
@@ -326,7 +332,7 @@ Even symbols:
   :config ...)
 #+end_src
 
-** :advice-add :advice-remove
+* :advice-add, :advice-remove
 Shorthands for ~:init (advice-[add|remove] ...)~
 
 + ~:advice-add~
@@ -352,7 +358,7 @@ context.
   :advice-remove (my-function other-function))
 #+end_src
 
-** :local-set
+* :local-set
 Bind variables locally in some hooks.
 This is a shorthand for ~:hook (my-hook . (lambda (&rest _) (setq-local ...)))~
 
@@ -382,7 +388,7 @@ Alternatively you can specify a hook to bind the variables:
          ...))
 #+end_src
 
-* Installation and Usage
+ Installation and Usage
 
 ~use-package-x~ is not available in any ELPA, but you can install
 it using ~package-vc-install~:

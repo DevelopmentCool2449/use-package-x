@@ -4,15 +4,22 @@
 
 Development release which includes the following keywords:
 
-+ :setopt
-+ :hook+
-+ :hook-suffix
-+ :which-key-replacement
-+ :custom-face*
-+ :custom-icon
-+ :keymap-define
-+ :emacs< :emacs<= :emacs= :emacs> :emacs>=
-+ :advice-add
-+ :advice-remove
-+ :doc
-+ :tag
+- :advice-add
+- :advice-remove
+- :custom-face*
+- :custom-icon
+- :doc
+- :tag
+- :hook-suffix
+- :hook+
+- :keymap-define
+- :keymap-set
+- :setopt
+- :local-set
+- :which-key-replacement
+- :emacs<
+- :emacs<=
+- :emacs=
+- :emacs>
+- :emacs>=
+- :mark

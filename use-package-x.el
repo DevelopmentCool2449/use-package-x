@@ -47,6 +47,7 @@
 ;; - :emacs=
 ;; - :emacs>
 ;; - :emacs>=
+;; - :mark
 ;;
 ;; All these keywords will autoload when used,
 ;; No need for "(require 'use-package-x-...)".
@@ -62,6 +63,7 @@
   '(((:advice-add :advice-remove) . :after)
     ((:custom-face* :custom-icon) . :custom-face)
     ((:doc :tag) . :preface)
+    (:mark . :ensure)
     (:hook-suffix . :preface)
     (:hook+ . :hook)
     ((:emacs< :emacs<= :emacs= :emacs> :emacs>=) . :if)

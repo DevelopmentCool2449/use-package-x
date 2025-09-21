@@ -65,15 +65,11 @@
              (setq custom-enabled-themes (remq 'use-package custom-enabled-themes)))
            (custom-theme-set-icons
             'use-package
-            ,@(mapcar
-               #'(lambda (def)
-                   `'(,@def))
-               args))))
+            ,@(mapcar #'(lambda (def) `'(,@def))
+                      args))))
      `((custom-set-icons
-        ,@(mapcar
-           #'(lambda (def)
-               `'(,@def))
-           args))))
+        ,@(mapcar #'(lambda (def) `'(,@def))
+                  args))))
    (use-package-process-keywords name rest state)))
 
 (provide 'use-package-x-custom-icon)

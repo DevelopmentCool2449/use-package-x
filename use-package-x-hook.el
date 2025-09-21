@@ -71,6 +71,7 @@
 ;;; Functions
 
 ;;; :hook-suffix
+
 ;;;###autoload
 (defun use-package-normalize/:hook-suffix (_name keyword args)
   "Normalize :hook-prefix, ensure it's a string or nil."
@@ -92,6 +93,7 @@ Set `use-package-hook-name-suffix' to ARG only in the current
 
 
 ;;; :hook+
+
 (defun use-package-x--normalize-pairs (list label name)
   "Normalize all the pairs in the LIST."
   (if (consp (car-safe (cdr-safe (car list))))
