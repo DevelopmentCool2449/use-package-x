@@ -388,7 +388,26 @@ Alternatively you can specify a hook to bind the variables:
          ...))
 #+end_src
 
- Installation and Usage
+* :mark
+Include package to ~package-selected-packages~.
+
+#+begin_quote
+[!WARNING]
+This should only be used with third-party packages.
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package gptel
+  ;; Install the package
+  :ensure t
+  ;; and include it in `package-selected-packages',
+  ;; so it will not get removed by `package-autoremove'
+  :mark t
+  ...)
+#+end_src
+
+
+* Installation and Usage
 
 ~use-package-x~ is not available in any ELPA, but you can install
 it using ~package-vc-install~:

@@ -48,6 +48,8 @@
 
 ;;;###autoload
 (defun use-package-handler/:mark (name _keyword _args rest state)
+  (when (boundp 'package-selected-packages)
+    (add-to-list 'package-selected-packages 'use-package-x))
   (use-package-concat
    `((add-to-list 'package-selected-packages ',name))
    (use-package-process-keywords name rest state)))
