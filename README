@@ -17,8 +17,8 @@ may change.
 I apologize for the inconvenience.
 #+end_quote
 
-use-package-x is an extension for use-package which provides
-additional keywords for a simple and cleaner configuration.
+use-package-x is a collection of keywords for use-package which
+intended a simple and cleaner configuration.
 
 This package provides the following extra keywords for ~use-package~:
 

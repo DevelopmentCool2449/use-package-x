@@ -1,6 +1,6 @@
 ;;; use-package-x-emacs-versions.el --- :emacs< :emacs<= :emacs= :emacs> :emacs>= definitions  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2025 Free Software Foundation, Inc.
+;; Copyright (C) 2025, 2026 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions

@@ -1,6 +1,6 @@
 ;;; use-package-x-mark.el --- :mark keyword definition  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2025  Elijah Gabe Pérez
+;; Copyright (C) 2025, 2026 Free Software Foundation, Inc.
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions
