@@ -1,4 +1,4 @@
-;;; use-package-x-tests.el --- test suite for use-package-x keywords  -*- lexical-binding: t; -*-
+;;; use-package-x-tests.el --- test suite for use-package-x keywords  -*- lexical-binding: t; no-byte-compile: t; no-update-autoloads: t; -*-
 
 ;; Copyright (C) 2025, 2026 Free Software Foundation, Inc.
 
