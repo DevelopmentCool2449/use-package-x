@@ -428,6 +428,9 @@ After it is already installed you can add the keywords to
 
 #+begin_src emacs-lisp
 (use-package use-package-x
+  :ensure t
+  :vc ( :url "https://github.com/DevelopmentCool2449/use-package-x"
+        :rev :newest)
   :config
   (use-package-x-add-keywords))
 #+end_src
