@@ -1,6 +1,6 @@
 ;;; use-package-x.el --- Additional keywords for use-package  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2025, 2026 Free Software Foundation, Inc.
+;; Copyright (C) 2025, 2026 Elias G. Perez
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Homepage: https://github.com/DevelopmentCool2449/use-package-x
@@ -8,8 +8,6 @@
 ;; Package-Requires: ((emacs "24.3") (compat "29.1") use-package)
 ;; Keywords: convenience, extensions
 ;; Version: 0.0.1
-
-;; This file is not yet part of GNU Emacs.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -84,6 +82,9 @@ after that.")
                   (flatten-tree
                    (use-package-list-insert (car kw) ret (cdr kw) t))))
           ret)))
+
+;; Add the keywords
+(use-package-x-add-keywords)
 
 (provide 'use-package-x)
 ;;; use-package-x.el ends here
