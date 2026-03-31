@@ -61,7 +61,7 @@
   '(((:advice-add :advice-remove) . :after)
     ((:custom-face* :custom-icon) . :custom-face)
     ((:doc :tag) . :preface)
-    (:mark . :ensure)
+    (:mark . :no-require)
     (:hook-suffix . :preface)
     (:hook+ . :hook)
     ((:emacs< :emacs<= :emacs= :emacs> :emacs>=) . :if)
