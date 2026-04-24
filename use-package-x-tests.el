@@ -83,6 +83,7 @@
     :keymap-set
     ;; keymap-global-set
     ("C-x foo" #'command)
+    ("C-x foo") ; Unbind
     ;; keymap-set
     (:map test-mode-map
           ("C-x foo" #'command)
@@ -90,6 +91,8 @@
     (:map (my-map1 my-map2)
           ("C-x foo" #'command)
           ("C-c bar" my-map))
+    (:map flymake-mode-map ; Unbind
+          ("<left-fringe> <mouse-1>"))
     ;; keymap-set-after
     ("C-c b" my-map 'after-map) ; Global
     (:map my-menu-map

@@ -101,12 +101,9 @@
 
 (defun use-package-x--set-keymaps (list map)
   "Return the keymap function to use."
-  (cond
-   ((length= list 3)
-    `(keymap-set-after ,map ,(car list) ,(nth 1 list) ,(nth 2 list)))
-   ((equal map '(current-global-map))
-    `(keymap-global-set ,(car list) ,(nth 1 list)))
-   (t `(keymap-set ,map ,(car list) ,(nth 1 list)))))
+  (if (length= list 3)
+      `(keymap-set-after ,map ,(car list) ,(nth 1 list) ,(nth 2 list))
+    `(keymap-set ,map ,(car list) ,(nth 1 list))))
 
 ;;;###autoload
 (defun use-package-handler/:keymap-set (name _keyword args rest state)
@@ -114,22 +111,26 @@
    (use-package-process-keywords name rest state)
    (mapcan
     (lambda (elt)
-      (let ((map (if (eq (car elt) :map)
-                     (cadr elt)
-                   '(current-global-map))))
-
-        (cond ((stringp (car elt))
-               (list (use-package-x--set-keymaps elt map)))
-              ((and (eq (car elt) :map) (listp (cadr elt)))
+      (let ((maps (if (eq (car elt) :map)
+                     (ensure-list (cadr elt))
+                   '(current-global-map)))
+            (bindings (if (eq (car elt) :map)
+                          (cddr elt)
+                        elt)))
+        (cond ((equal maps '(current-global-map)) ; Global
+               (list (use-package-x--set-keymaps bindings maps)))
+              (t ; Keymaps
                (cl-loop
-                for i in map append
-                (cl-loop
-                 for x in (cddr elt)
-                 collect (use-package-x--set-keymaps x i))))
-              (t
-               (cl-loop
-                for x in (cddr elt) collect
-                (use-package-x--set-keymaps x map))))))
+                for map in maps
+                append (cl-loop
+                        for bindings in bindings
+                        collect (use-package-x--set-keymaps bindings map))
+                into result
+                finally return
+                `((if (boundp ',map)
+                    (progn ,@result)
+                    (with-eval-after-load ,(symbol-name name)
+                      ,@result))))))))
     args)))
 
 (provide 'use-package-x-keymap)

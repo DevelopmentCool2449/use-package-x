@@ -40,11 +40,10 @@
 ;;   (require 'use-package-x-local-set)
 
 ;;; Code:
-;;; NOTE: Should this use `setq-mode-local' instead?
 
 ;;; Requires
 (require 'use-package)
-
+;; TODO: Use setopt-local after compat 31.x is available
 
 
 ;;;###autoload
