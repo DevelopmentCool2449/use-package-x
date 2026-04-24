@@ -59,7 +59,7 @@
                    " or (:hook <symbol-hook> <symbol> <value> ...)")))
         args))))
 
-(defun use-package-x--local-hook (hook values)
+(defsubst use-package-x--local-hook (hook values)
   `(add-hook (quote ,hook)
              (lambda (&rest _)
                (setq-local ,@values))))
@@ -69,14 +69,12 @@
   (use-package-concat
    (mapcan
     (lambda (elt)
+      ;; :hook
       (if (eq (car elt) :hook)
-          ;; :hook
-          (if-let* ((hook (nth 1 elt))
-                    ((listp hook)))
-              (mapcar
-               (lambda (x) (use-package-x--local-hook x (cddr elt)))
-               hook)
-            (list (use-package-x--local-hook hook (cddr elt))))
+          (mapcar
+           (lambda (hook) (use-package-x--local-hook hook (cddr elt)))
+           ;; list of hooks
+           (ensure-list (nth 1 elt)))
         ;; plain variables
         (let* ((sym-name (symbol-name name))
                (hook (intern (concat
