@@ -138,7 +138,7 @@ and `use-package-handler/:hook+'."
        (lambda (elt)
          (if (eq (car-safe elt) :depth)
              (mapcar (lambda (pairs)
-                       (cons (nth 1 elt) (list pairs)))
+                       (cons (nth 1 elt) (list pairs))) ; Append depth number as car
                      (use-package-x--normalize-pairs (cddr elt) label name))
            (use-package-x--normalize-pairs (list elt) label name)))
        args))))
@@ -157,11 +157,11 @@ and `use-package-handler/:hook+'."
   "Like `use-package-autoloads-mode' but supports the :depth keyword and funcs."
   (setq args
         (mapcar
+         ;; return the list without the depth numbers
          (lambda (list)
-           (cond
-            ;; return the list without the depth number
-            ((integerp (car list)) (cadr list))
-            (t list)))
+           (if (integerp (car list))
+               (cadr list)
+             list))
          args))
 
   (cl-loop for x in args
@@ -173,17 +173,17 @@ and `use-package-handler/:hook+'."
                     collect (cons cm 'command))
            else collect (cons (cdr x) 'command)))
 
-(defun use-package-x--create-hook (sym fun depth)
+(defsubst use-package-x--create-hook (sym fun depth)
   "Return the proper `add-hook' for mode SYM with FUN and DEPTH (if there is)."
   (let ((symname (symbol-name sym)))
-    (if (and (boundp sym)
-             (not (string-suffix-p "-mode" symname)))
-        `(add-hook (quote ,sym) (function ,fun) ,depth)
-      `(add-hook
-        (quote ,(intern
-                 (concat symname use-package-hook-name-suffix)))
-        (function ,fun)
-        ,depth))))
+    `(add-hook
+      (quote ,(if (and (boundp sym)
+                       (not (string-suffix-p "-mode" symname)))
+                  sym
+                (intern
+                 (concat symname use-package-hook-name-suffix))))
+      (function ,fun)
+      ,depth)))
 
 ;;;###autoload
 (defun use-package-handler/:hook+ (name _keyword args rest state)
@@ -196,19 +196,17 @@ functions."
    (cl-mapcan
     (lambda (def)
       (let* ((car (car def))
-             (depth (if (integerp car) car))
-             (syms (if depth (caadr def) car))
-             ;; FUN can be a function or a list
+             (depth (when (integerp car) car))
+             (hooks (ensure-list (if depth (caadr def) car)))
+             ;; FUN can be a function or a list of functions
              (fun (if depth (cdadr def) (cdr def)))
+             ;; Check if FUN is a list of functions
              (multi-p (consp (car-safe fun))))
         (when fun
           (cl-loop
-           for mode in (use-package-hook-handler-normalize-mode-symbols syms)
-           if multi-p append ; For multiple funcs
-           (cl-loop for fn in (car fun) collect
-                    (use-package-x--create-hook mode fn depth))
-           else
-           collect (use-package-x--create-hook mode fun depth)))))
+           for mode in hooks append
+           (cl-loop for fn in (if multi-p (car fun) (list fun)) collect
+                    (use-package-x--create-hook mode fn depth))))))
     (use-package-x--normalize-commands args))))
 
 (provide 'use-package-x-hook)

@@ -57,7 +57,12 @@
     (:depth -4
             (outline-mode
              ((lambda () (print "-4 depth!"))
-              outline-hide-body)))))
+              outline-hide-body)))
+    (:depth -2
+            ((prog3-mode
+              prog4-mode)
+             ((lambda () my-code)
+              my-function)))))
 
 ;;; :hook-suffix
 (pp-macroexpand-expression
