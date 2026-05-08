@@ -4,7 +4,7 @@
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions
-;; Package-Requires: ((use-package "2.1") (compat "29.1"))
+;; Package-Requires: ((use-package "2.1") (compat "31"))
 
 ;; This is free and unencumbered software released into the public domain.
 ;; For more information, please refer to <https://unlicense.org/>
