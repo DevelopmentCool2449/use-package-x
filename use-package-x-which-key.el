@@ -4,7 +4,6 @@
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions
-;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -71,7 +70,7 @@
 
 ;;;###autoload
 (defun use-package-normalize/:which-key-replacement (_name keyword args)
-  "Normalize :which-key-replacement keyword."
+  "Normalize :which-key-replacement KEYWORD."
   (unless (locate-library "which-key")
     (use-package-error
      (concat (symbol-name keyword) "which-key must be installed")))
@@ -90,6 +89,7 @@
 
 ;;;###autoload
 (defun use-package-handler/:which-key-replacement (name _keyword args rest state)
+  "Handler function for :which-key-replacement."
   (use-package-concat
    (use-package-process-keywords name rest state)
    (mapcar

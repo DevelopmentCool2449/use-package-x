@@ -4,7 +4,6 @@
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions
-;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -68,35 +67,35 @@ If version is a number, convert it to a string."
 ;;; :emacs<
 
 ;;;###autoload
-(defalias 'use-package-normalize/:emacs< 'use-package-x-normalize-version)
+(defalias 'use-package-normalize/:emacs< #'use-package-x-normalize-version)
 ;;;###autoload
-(defalias 'use-package-handler/:emacs< 'use-package-handler/:if)
+(defalias 'use-package-handler/:emacs< #'use-package-handler/:if)
 
 ;;; :emacs<=
 ;;;###autoload
-(defalias 'use-package-normalize/:emacs<= 'use-package-x-normalize-version)
+(defalias 'use-package-normalize/:emacs<= #'use-package-x-normalize-version)
 ;;;###autoload
-(defalias 'use-package-handler/:emacs<= 'use-package-handler/:if)
+(defalias 'use-package-handler/:emacs<= #'use-package-handler/:if)
 
 ;;; :emacs=
 ;;;###autoload
-(defalias 'use-package-normalize/:emacs= 'use-package-x-normalize-version)
+(defalias 'use-package-normalize/:emacs= #'use-package-x-normalize-version)
 ;;;###autoload
-(defalias 'use-package-handler/:emacs= 'use-package-handler/:if)
+(defalias 'use-package-handler/:emacs= #'use-package-handler/:if)
 
 ;;; :emacs>
 
 ;;;###autoload
-(defalias 'use-package-normalize/:emacs> 'use-package-x-normalize-version)
+(defalias 'use-package-normalize/:emacs> #'use-package-x-normalize-version)
 ;;;###autoload
-(defalias 'use-package-handler/:emacs> 'use-package-handler/:if)
+(defalias 'use-package-handler/:emacs> #'use-package-handler/:if)
 
 ;;; :emacs>=
 
 ;;;###autoload
-(defalias 'use-package-normalize/:emacs>= 'use-package-x-normalize-version)
+(defalias 'use-package-normalize/:emacs>= #'use-package-x-normalize-version)
 ;;;###autoload
-(defalias 'use-package-handler/:emacs>= 'use-package-handler/:if)
+(defalias 'use-package-handler/:emacs>= #'use-package-handler/:if)
 
 (provide 'use-package-x-emacs-versions)
 ;;; use-package-x-emacs-versions.el ends here

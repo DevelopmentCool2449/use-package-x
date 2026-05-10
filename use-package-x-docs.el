@@ -4,7 +4,6 @@
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions
-;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,15 +53,15 @@
 
 ;;; :doc
 ;;;###autoload
-(defalias 'use-package-normalize/:doc 'always)
+(defalias 'use-package-normalize/:doc #'always)
 ;;;###autoload
-(defalias 'use-package-handler/:doc 'use-package-x-handle-always)
+(defalias 'use-package-handler/:doc #'use-package-x-handle-always)
 
 ;;; :tag
 ;;;###autoload
-(defalias 'use-package-normalize/:tag 'always)
+(defalias 'use-package-normalize/:tag #'always)
 ;;;###autoload
-(defalias 'use-package-handler/:tag 'use-package-x-handle-always)
+(defalias 'use-package-handler/:tag #'use-package-x-handle-always)
 
 (provide 'use-package-x-docs)
 ;;; use-package-x-docs.el ends here

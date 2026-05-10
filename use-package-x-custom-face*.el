@@ -4,7 +4,6 @@
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions
-;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -40,15 +39,15 @@
 
 ;;; Functions
 ;;;###autoload
-(defalias 'use-package-normalize/:custom-face* 'use-package-normalize/:custom-face)
+(defalias 'use-package-normalize/:custom-face* #'use-package-normalize/:custom-face)
 
 ;;;###autoload
 (defun use-package-handler/:custom-face* (name _keyword args rest state)
   (use-package-concat
-   (mapcar #'(lambda (def)
-               `(progn
-                  (apply #'face-spec-set (backquote ,def))
-                  (put ',(car def) 'face-modified t)))
+   (mapcar (lambda (def)
+             `(progn
+                (apply #'face-spec-set (backquote ,def))
+                (put ',(car def) 'face-modified t)))
            args)
    (use-package-process-keywords name rest state)))
 

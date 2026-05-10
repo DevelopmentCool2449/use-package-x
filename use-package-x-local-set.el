@@ -4,7 +4,6 @@
 
 ;; Author: Elias G. Perez <eg642616@gmail.com>
 ;; Keywords: convenience, tools, extensions
-;; Package-Requires: ((use-package "2.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -48,7 +47,7 @@
 
 ;;;###autoload
 (defun use-package-normalize/:local-set (_name keyword args)
-  "Normalize :local-set keyword, ensure ARGS are valid."
+  "Normalize :local-set KEYWORD, ensure ARGS are valid."
   (use-package-as-one (symbol-name keyword) args
     (lambda (label arg)
       (let ((arg-car (car arg)))
