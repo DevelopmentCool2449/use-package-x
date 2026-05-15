@@ -73,6 +73,7 @@ The CAR is the keyword(s) to insert, and the CDR the keyword to insert
 after that.")
 
 ;;; Functions
+;;;###autoload
 (defun use-package-x-add-keywords ()
   "Add use-package-x keywords to `use-package-keywords'."
   (setq use-package-keywords
