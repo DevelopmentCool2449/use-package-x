@@ -56,19 +56,9 @@
   "Generate use-package custom-icon keyword code."
   (use-package-concat
    ;; Code extracted from `use-package-handler/:custom'
-   (if (bound-and-true-p use-package-use-theme)
-       `((let ((custom--inhibit-theme-enable nil))
-           (unless (memq 'use-package custom-known-themes)
-             (deftheme use-package)
-             (enable-theme 'use-package)
-             (setq custom-enabled-themes (remq 'use-package custom-enabled-themes)))
-           (custom-theme-set-icons
-            'use-package
-            ,@(mapcar (lambda (def) `'(,@def))
-                      args))))
-     `((custom-set-icons
-        ,@(mapcar (lambda (def) `'(,@def))
-                  args))))
+   `((custom-set-icons
+      ,@(mapcar (lambda (def) `'(,@def))
+                args)))
    (use-package-process-keywords name rest state)))
 
 (provide 'use-package-x-custom-icon)
