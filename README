@@ -7,7 +7,7 @@
 #+title: use-package-x
 #+author: Elias G. Perez
 
-[[https://melpa.org/#/use-package-x][file:https://melpa.org/packages/use-package-x-badge.svg]]
+[[https://snapshots.melpa.org/#/use-package-x][file:https://snapshots.melpa.org/packages/use-package-x-badge.svg]]
 
 use-package-x is a collection of keywords for use-package which
 intended a simple and cleaner configuration.
