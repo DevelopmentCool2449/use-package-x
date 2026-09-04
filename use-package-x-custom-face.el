@@ -1,4 +1,4 @@
-;;; use-package-x-custom-face*.el --- :custom-face* keyword definition  -*- lexical-binding: t; -*-
+;;; use-package-x-custom-face.el --- :custom-face* keyword definition  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025, 2026 Elias G. Perez
 
@@ -28,7 +28,7 @@
 ;;
 ;; To use it load this library in your init file:
 ;;
-;;   (require 'use-package-x-custom-face*)
+;;   (require 'use-package-x-custom-face)
 
 ;;; Code:
 
@@ -52,5 +52,5 @@
    (use-package-process-keywords name rest state)))
 
 
-(provide 'use-package-x-custom-face*)
-;;; use-package-x-custom-face*.el ends here
+(provide 'use-package-x-custom-face)
+;;; use-package-x-custom-face.el ends here
